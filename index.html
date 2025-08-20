@@ -1,178 +1,413 @@
-<!DOCTYPE html>
-<html lang="fa">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پرتال گزارش شیفت</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سامانه شیفت شرکت گهرزمین</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0d1b2a;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-      text-align: center;
+    :root{
+      --brand:#003087;
+      --bg:#0f172a;
+      --panel:#0b1222;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --danger:#dc2626;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --topbar-h:64px;
     }
-    header {
-      background-color: #1b263b;
-      padding: 15px;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:
+        radial-gradient(1200px 600px at 120% -10%, #0b1530 0%, transparent 60%),
+        radial-gradient(1000px 800px at -10% 110%, #13223f 0%, transparent 60%),
+        linear-gradient(180deg,#0a0f1f 0%, #0f172a 100%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Naskh Arabic UI", "Vazirmatn", Arial, sans-serif;
     }
-    header img {
-      height: 50px;
+
+    /* Topbar (دکمه برگشتِ همیشه-قابل-مشاهده) */
+    .topbar{
+      position:fixed; inset:0 0 auto 0; height:var(--topbar-h);
+      background:rgba(10,15,31,.9); backdrop-filter: blur(8px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex; align-items:center; gap:12px; padding:0 14px;
+      z-index:1000;
     }
-    .container {
-      padding: 20px;
+    .topbar .back{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:44px; height:44px; border-radius:10px;
+      background:#0b1324; border:1px solid rgba(255,255,255,.14);
+      font-size:20px; cursor:pointer; user-select:none;
     }
-    .card {
-      background-color: #1b263b;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px auto;
-      width: 90%;
-      max-width: 400px;
+    .topbar .title{
+      font-size:1.05rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .card h3 {
-      margin-top: 0;
+    .wrap{
+      padding: calc(var(--topbar-h) + env(safe-area-inset-top,0px)) 16px 80px 16px;
+      max-width:980px; margin:0 auto;
     }
-    .btn {
-      display: inline-block;
-      background-color: #415a77;
-      color: white;
-      padding: 10px 20px;
-      margin-top: 15px;
-      border-radius: 5px;
-      text-decoration: none;
-      cursor: pointer;
+
+    .card{
+      background:rgba(17,24,39,.7); border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin:14px 0;
     }
-    .btn:hover {
-      background-color: #778da9;
+    .logo{
+      width:120px;height:120px;border-radius:50%; background:var(--brand);
+      display:grid; place-items:center; box-shadow:0 12px 40px rgba(0,48,135,.45), inset 0 0 0 6px rgba(255,255,255,.08);
+      margin:24px auto 12px;
     }
-    textarea {
-      width: 90%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 5px;
-      border: none;
-      resize: none;
-      font-size: 14px;
+    .logo span{font-size:44px;font-weight:800; letter-spacing:.5px; color:white}
+    .logo-img{width:120px; height:120px; border-radius:50%; object-fit:cover; display:block; margin:24px auto 12px; border:6px solid rgba(255,255,255,.08); box-shadow:0 12px 40px rgba(0,48,135,.45)}
+    h1{margin:.25rem 0 1rem 0; font-size:1.4rem; text-align:center}
+    p.muted{color:var(--muted); text-align:center; margin:.25rem 0 1.25rem 0}
+
+    label{display:block; font-size:.95rem; margin:.5rem 0 .35rem 0; color:#cbd5e1}
+    input, textarea, select{
+      width:100%; padding:12px 14px; background:#0b1324; color:var(--text);
+      border:1px solid rgba(255,255,255,.12); border-radius:12px; outline:none;
     }
-    .back-btn {
-      display: block;
-      margin: 20px auto;
-      background-color: #e63946;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 5px;
-      text-decoration: none;
-      cursor: pointer;
-      width: fit-content;
+    input:focus, textarea:focus, select:focus{border-color:#334155; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+    textarea{resize:vertical; min-height:120px}
+
+    .btn{
+      width:100%; margin-top:14px; padding:12px 16px; border-radius:12px; border:none; color:white;
+      background:linear-gradient(90deg,#2563eb,#1d4ed8);
+      cursor:pointer; font-size:1rem; font-weight:800; letter-spacing:.3px; box-shadow:0 8px 26px rgba(37,99,235,.35);
     }
-    .back-btn:hover {
-      background-color: #ff4d6d;
+    .btn:active{transform: translateY(1px)}
+    .btn.secondary{
+      background:#0b1324; border:1px solid rgba(255,255,255,.14); box-shadow:none; font-weight:700;
     }
+
+    .unit-grid{display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));}
+    .unit{padding:16px; border-radius:14px; background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.06); cursor:pointer}
+    .unit h3{margin:.2rem 0 .2rem 0}
+    .unit p{margin:0; color:#9fb2c8; font-size:.92rem}
+
+    .grid{display:grid; gap:12px}
+    .grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr))}
+    @media (min-width:780px){ .grid.kpi{grid-template-columns: repeat(3, minmax(0,1fr))} }
+    .tile{
+      background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.05);
+      padding:14px; border-radius:12px;
+    }
+    .tile h3{margin:.2rem 0 .4rem 0; font-size:1rem}
+    .tile .v{color:#e2e8f0; font-weight:800; font-size:1.1rem}
+
+    /* Bottom back button (اضافی برای اطمینان) */
+    .bottom-back{
+      position:fixed; inset:auto 16px 16px 16px; z-index:1000;
+    }
+
+    .hint{color:#9fb2c8; font-size:.9rem; margin-top:6px}
+    .row{display:flex; gap:12px}
+    .row>*{flex:1}
+    .ok{color:#86efac}
+    .warn{color:#fde68a}
+    .err{color:#fecaca}
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="Gz.PNG" alt="لوگو">
-    <h2>پرتال گزارش شیفت</h2>
-  </header>
-
-  <div class="container" id="login-section">
-    <h3>ورود به سامانه</h3>
-    <input type="text" id="username" placeholder="نام کاربری"><br><br>
-    <input type="password" id="password" placeholder="رمز عبور"><br><br>
-    <button class="btn" onclick="login()">ورود</button>
+  <!-- نوار بالایی با دکمه برگشت -->
+  <div class="topbar">
+    <div class="back" id="btn-back" title="بازگشت">↩️</div>
+    <div class="title" id="top-title">سامانه شیفت شرکت گهرزمین</div>
   </div>
 
-  <div class="container" id="main-menu" style="display:none;">
-    <h3>انتخاب شیفت</h3>
-    <button class="btn" onclick="openShift('A')">شیفت A</button>
-    <button class="btn" onclick="openShift('B')">شیفت B</button>
-    <button class="btn" onclick="openShift('C')">شیفت C</button>
-  </div>
+  <div class="wrap">
+    <!-- لاگین -->
+    <section id="screen-login" class="card">
+      <!-- لوگو: اگر Gz.PNG موجود باشد نشان می‌دهد، وگرنه دایره GZ -->
+      <img src="Gz.PNG" alt="لوگو" class="logo-img" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='grid';">
+      <div id="logo-fallback" class="logo" style="display:none"><span>GZ</span></div>
 
-  <div class="container" id="shift-page" style="display:none;">
-    <div class="card">
-      <h3 id="shift-title"></h3>
-      <p id="shift-time"></p>
-      <p id="supervisor"></p>
-      <div id="shift-data"></div>
+      <h1>ورود به سامانه شیفت شرکت گهرزمین</h1>
+      <p class="muted">برای ورود، نام کاربری و رمز را وارد کنید.</p>
+      <label>نام کاربری</label>
+      <input id="username" placeholder="مدیر: 1 تا 5 • کاربر: 1000 تا 1800">
+      <label>رمز عبور</label>
+      <input id="password" type="password" placeholder="123">
+      <button class="btn" id="btn-login">ورود</button>
+    </section>
+
+    <!-- انتخاب واحد -->
+    <section id="screen-units" class="card" style="display:none">
+      <h1>انتخاب واحد</h1>
+      <div class="unit-grid" id="units-grid"></div>
+    </section>
+
+    <!-- انتخاب شیفت یک واحد -->
+    <section id="screen-shifts" class="card" style="display:none">
+      <h1 id="unit-title">شیفت‌های واحد</h1>
+      <div class="grid" id="shifts-grid"></div>
+      <p class="hint">شیفت‌ها به‌صورت A (07–15)، B (15–23)، C (23–07) و D (استراحت) تعریف شده‌اند.</p>
+    </section>
+
+    <!-- جزئیات شیفت -->
+    <section id="screen-details" style="display:none">
+      <div class="card">
+        <h1 id="details-title">جزئیات شیفت</h1>
+        <div class="row">
+          <div class="card" style="margin:0">
+            <div id="detail-time" class="hint"></div>
+            <div id="detail-supervisor" class="hint"></div>
+          </div>
+          <div class="card" style="margin:0">
+            <div id="detail-status" class="hint"></div>
+            <div id="detail-now" class="hint"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">شاخص‌های KPI</h3>
+        <div class="grid kpi" id="kpi-grid"></div>
+      </div>
+
+      <div class="card">
+        <h3>گزارش شیفت</h3>
+        <textarea id="report-box" placeholder="گزارش این شیفت را بنویسید…"></textarea>
+        <button class="btn" id="save-report">ذخیره گزارش</button>
+        <div id="report-msg" class="hint"></div>
+      </div>
+
+      <div class="card">
+        <h3>نظر مدیر واحد</h3>
+        <textarea id="manager-box" placeholder="نظر مدیر واحد…"></textarea>
+        <button class="btn secondary" id="save-manager">ذخیره نظر مدیر</button>
+        <div id="manager-msg" class="hint"></div>
+      </div>
+    </section>
+
+    <!-- دکمه برگشتِ پایین صفحه -->
+    <div class="bottom-back">
+      <button class="btn secondary" id="btn-back-bottom">↩️ بازگشت به صفحه قبل</button>
     </div>
-
-    <div class="card">
-      <h3>گزارش شیفت</h3>
-      <textarea id="report-box" rows="4"></textarea>
-    </div>
-
-    <div class="card">
-      <h3>نظر مدیر واحد</h3>
-      <p id="manager-note"></p>
-    </div>
-
-    <a class="back-btn" onclick="goBack()">⬅ بازگشت به صفحه قبل</a>
   </div>
 
   <script>
-    let currentUserType = "";
+    // ------------------ داده‌ها ------------------
+    const SHIFT_TIMES = {
+      A: "07:00 - 15:00",
+      B: "15:00 - 23:00",
+      C: "23:00 - 07:00",
+      D: "استراحت"
+    };
 
-    function login() {
-      let username = document.getElementById("username").value;
-      let password = document.getElementById("password").value;
-
-      if(password !== "123") {
-        alert("رمز عبور اشتباه است");
-        return;
+    const UNITS = {
+      "معدن": {
+        supervisors: {A:"—", B:"—", C:"—", D:"—"},
+        kpis: { "Shovel Availability": "92%", "Truck Utilization": "88%", "Ore Output":"1200 t/h" }
+      },
+      "فرآوری و خردایش": {
+        supervisors: {A:"کوچولو", B:"فرهاد", C:"طوسی", D:"ملکشاهی"},
+        kpis: { "Throughput": "800 t/h", "Availability": "91%", "Utilization":"87%" }
+      },
+      "گندله‌سازی": {
+        supervisors: {A:"سعید", B:"نورمندی", C:"امامی", D:"روح‌الامینی"},
+        kpis: { "Humidity":"8.2%", "FeO":"12.5%", "Blending":"3500", "Production":"500 تن/ساعت", "Reject":"2.1%" }
+      },
+      "انرژی و سیالات": {
+        supervisors: {A:"حسن", B:"حاج‌رضا", C:"کریمی", D:"مجیدی"},
+        kpis: { "Gas":"50%", "Electricity":"80%", "Water":"50%" }
+      },
+      "آزمایشگاه": {
+        supervisors: {A:"—", B:"—", C:"—", D:"—"},
+        kpis: { "Samples/day":"120", "Turnaround":"4 h", "Accuracy":"99.2%" }
       }
+    };
 
-      let userNum = parseInt(username);
+    // ------------------ وضعیت و ناوبری ------------------
+    const screens = ["screen-login","screen-units","screen-shifts","screen-details"];
+    let stack = []; // پشتهٔ صفحات برای برگشت
+    let current = "screen-login";
+    let role = "user"; // user | manager
+    let state = { unit:null, shift:null };
 
-      if(userNum >= 1 && userNum <= 5) {
-        currentUserType = "manager";
-        document.getElementById("login-section").style.display = "none";
-        document.getElementById("main-menu").style.display = "block";
-      } else if(userNum >= 1000 && userNum <= 1800) {
-        currentUserType = "user";
-        document.getElementById("login-section").style.display = "none";
-        document.getElementById("main-menu").style.display = "block";
-      } else {
-        alert("نام کاربری معتبر نیست");
+    const $ = id => document.getElementById(id);
+
+    function show(id, push=true, titleText=null){
+      screens.forEach(s => $(s).style.display = (s===id) ? "block" : "none");
+      if(push && current !== id){ stack.push(current); }
+      current = id;
+      // عنوان بالای صفحه
+      $("top-title").textContent = titleText || defaultTitleFor(id);
+      // نمایش/عدم نمایش دکمه برگشت
+      const showBack = stack.length > 0;
+      $("btn-back").style.visibility = showBack ? "visible" : "hidden";
+      $("btn-back-bottom").style.display = showBack ? "block" : "none";
+      // اسکرول بالا
+      window.scrollTo({top:0, behavior:"instant"});
+    }
+    function back(){
+      if(!stack.length) return;
+      const prev = stack.pop();
+      show(prev, false);
+    }
+    $("btn-back").onclick = back;
+    $("btn-back-bottom").onclick = back;
+
+    function defaultTitleFor(id){
+      switch(id){
+        case "screen-login": return "سامانه شیفت شرکت گهرزمین";
+        case "screen-units": return "انتخاب واحد";
+        case "screen-shifts": return "انتخاب شیفت";
+        case "screen-details": return "جزئیات شیفت";
+        default: return "سامانه شیفت";
       }
     }
 
-    function openShift(shift) {
-      document.getElementById("main-menu").style.display = "none";
-      document.getElementById("shift-page").style.display = "block";
+    // ------------------ ورود ------------------
+    $("btn-login").addEventListener("click", ()=>{
+      const u = $("username").value.trim();
+      const p = $("password").value.trim();
+      if(p !== "123"){ alert("رمز عبور اشتباه است"); return; }
+      const n = parseInt(u, 10);
+      if(!Number.isFinite(n)){ alert("نام کاربری باید عدد باشد"); return; }
 
-      document.getElementById("shift-title").innerText = "واحد گندله سازی - شیفت " + shift;
-      document.getElementById("shift-time").innerText = "ساعت: 07:00 - 15:00";
-      document.getElementById("supervisor").innerText = "سرپرست: سعید";
+      if(n>=1 && n<=5){ role="manager"; }
+      else if(n>=1000 && n<=1800){ role="user"; }
+      else { alert("نام کاربری معتبر نیست"); return; }
 
-      document.getElementById("shift-data").innerHTML = `
-        <p>Humidity: 8.2%</p>
-        <p>FeO: 12.5%</p>
-        <p>Production: 500 تن</p>
-        <p>Blending: 3500</p>
-        <p>Reject: 2.1%</p>
-      `;
+      buildUnits();
+      show("screen-units", true, "انتخاب واحد");
+    });
 
-      if(currentUserType === "manager") {
-        document.getElementById("report-box").value = "گزارش در حال بروز رسانی است";
-        document.getElementById("report-box").disabled = true;
-        document.getElementById("manager-note").innerText = "اینجا نظر مدیر وارد می‌شود";
-      } else {
-        document.getElementById("report-box").value = "";
-        document.getElementById("report-box").disabled = false;
-        document.getElementById("manager-note").innerText = "در حال بروز رسانی";
+    // ------------------ لیست واحدها ------------------
+    function buildUnits(){
+      const grid = $("units-grid");
+      grid.innerHTML = "";
+      Object.keys(UNITS).forEach(name=>{
+        const div = document.createElement("div");
+        div.className = "unit";
+        div.innerHTML = `<h3>${name}</h3><p>ورود به شیفت‌های ${name}</p>`;
+        div.onclick = ()=> openUnit(name);
+        grid.appendChild(div);
+      });
+    }
+    function openUnit(name){
+      state.unit = name;
+      $("unit-title").textContent = `شیفت‌های واحد ${name}`;
+      buildShifts(name);
+      show("screen-shifts", true, `واحد ${name} — انتخاب شیفت`);
+    }
+
+    // ------------------ لیست شیفت‌های یک واحد ------------------
+    function buildShifts(unitName){
+      const grid = $("shifts-grid");
+      grid.innerHTML = "";
+      ["A","B","C","D"].forEach(sh=>{
+        const sup = (UNITS[unitName].supervisors||{})[sh] || "—";
+        const t = SHIFT_TIMES[sh];
+        const btn = document.createElement("div");
+        btn.className = "card";
+        btn.style.cursor = "pointer";
+        btn.innerHTML = `
+          <h3 style="margin:.2rem 0;">شیفت ${sh}</h3>
+          <div class="hint">ساعت: ${t}</div>
+          <div class="hint">سرپرست: ${sup}</div>
+        `;
+        btn.onclick = ()=> openShift(unitName, sh);
+        grid.appendChild(btn);
+      });
+    }
+
+    // ------------------ جزئیات شیفت ------------------
+    function openShift(unitName, sh){
+      state.shift = sh;
+
+      const title = `واحد ${unitName} - شیفت ${sh}`;
+      $("details-title").textContent = title;
+      $("detail-time").textContent = `ساعت: ${SHIFT_TIMES[sh]}`;
+      $("detail-supervisor").textContent = `سرپرست: ${(UNITS[unitName].supervisors||{})[sh] || "—"}`;
+
+      // وضعیت جاری
+      $("detail-status").textContent = `وضعیت: ${currentShiftLabel()}`;
+      $("detail-now").textContent = `الان: ${new Date().toLocaleTimeString('fa-IR',{hour:'2-digit', minute:'2-digit'})}`;
+
+      // KPI ها
+      buildKPIs(UNITS[unitName].kpis || {});
+
+      // گزارش / نظر مدیر
+      loadNotes();
+
+      show("screen-details", true, title);
+    }
+
+    function buildKPIs(kpis){
+      const grid = $("kpi-grid");
+      grid.innerHTML = "";
+      Object.entries(kpis).forEach(([k,v])=>{
+        const el = document.createElement("div");
+        el.className = "tile";
+        el.innerHTML = `<h3>${k}</h3><div class="v">${v}</div>`;
+        grid.appendChild(el);
+      });
+    }
+
+    // مشخص کردن شیفت جاری (نمایشی)
+    function currentShiftLabel(){
+      const d = new Date();
+      const h = d.getHours();
+      if(h>=7 && h<15) return "در حال اجرا: A";
+      if(h>=15 && h<23) return "در حال اجرا: B";
+      return "در حال اجرا: C / استراحت: D";
+    }
+
+    // ------------------ گزارش و نظر مدیر (با ذخیره در localStorage) ------------------
+    function kReport(){ return `report_${state.unit}_${state.shift}`; }
+    function kManager(){ return `manager_${state.unit}_${state.shift}`; }
+
+    function loadNotes(){
+      const report = localStorage.getItem(kReport()) || "";
+      const manager = localStorage.getItem(kManager()) || "";
+
+      // نقش مدیر: گزارش فقط خواندنی، نظر مدیر قابل‌ویرایش
+      if(role==="manager"){
+        $("report-box").value = report || "گزارش در حال بروزرسانی است";
+        $("report-box").disabled = true;
+        $("save-report").style.display = "none";
+
+        $("manager-box").value = manager;
+        $("manager-box").disabled = false;
+        $("save-manager").style.display = "inline-block";
+
+        $("report-msg").textContent = "فقط قابل مشاهده برای مدیر";
+        $("manager-msg").textContent = "";
+      }else{
+        // نقش کاربر: گزارش قابل‌ویرایش، نظر مدیر فقط خواندنی
+        $("report-box").value = report;
+        $("report-box").disabled = false;
+        $("save-report").style.display = "inline-block";
+
+        $("manager-box").value = manager || "در حال بروز رسانی";
+        $("manager-box").disabled = true;
+        $("save-manager").style.display = "none";
+
+        $("report-msg").textContent = "";
+        $("manager-msg").textContent = "فقط قابل مشاهده";
       }
     }
 
-    function goBack() {
-      document.getElementById("shift-page").style.display = "none";
-      document.getElementById("main-menu").style.display = "block";
-    }
+    $("save-report").onclick = ()=>{
+      localStorage.setItem(kReport(), $("report-box").value.trim());
+      $("report-msg").textContent = "گزارش ذخیره شد ✔";
+      setTimeout(()=> $("report-msg").textContent="", 2000);
+    };
+    $("save-manager").onclick = ()=>{
+      localStorage.setItem(kManager(), $("manager-box").value.trim());
+      $("manager-msg").textContent = "نظر مدیر ذخیره شد ✔";
+      setTimeout(()=> $("manager-msg").textContent="", 2000);
+    };
+
+    // شروع
+    show("screen-login", false);
   </script>
-
 </body>
 </html>

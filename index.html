@@ -1,44 +1,46 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gohar Zamin – Factory Monitor</title>
-  <style>
-    :root{
-      --brand:#003087; --bg:#0f172a; --card:#111827;
-      --muted:#94a3b8; --text:#e5e7eb; --accent:#2563eb;
-      --ok:#16a34a; --danger:#dc2626; --shadow:0 10px 30px rgba(0,0,0,.25);
-      --radius:14px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Vazirmatn,Arial,sans-serif;color:var(--text);}
-    body{display:flex;align-items:center;justify-content:center;background: linear-gradient(180deg,#0a0f1f 0%,#0f172a 100%);}
-    .card{width:min(520px,92vw);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;}
-    .center{display:flex;align-items:center;justify-content:center;}
-    .logo{width:120px;height:120px;border-radius:50%;background:var(--brand);display:grid;place-items:center;margin:24px auto 16px;}
-    .logo span{font-size:44px;font-weight:800;color:white;}
-    h1{margin:.25rem 0 1rem;text-align:center;}
-    p.muted{color:var(--muted);text-align:center;margin:.25rem 0 1.25rem;}
-    label{display:block;font-size:.95rem;margin:.5rem 0 .35rem;color:#cbd5e1;}
-    input{width:100%;padding:12px 14px;background:#0b1324;color:var(--text);border:1px solid rgba(255,255,255,.08);border-radius:10px;outline:none;}
-    input:focus{border-color:#334155;box-shadow:0 0 0 3px rgba(37,99,235,.25);}
-    .btn{width:100%;margin-top:14px;padding:12px 16px;border-radius:10px;border:none;color:white;background:linear-gradient(90deg,#2563eb,#1d4ed8);cursor:pointer;font-size:1rem;font-weight:700;box-shadow:0 8px 26px rgba(37,99,235,.35);}
-    .btn:active{transform: translateY(1px);}
-    .alert{margin:.5rem 0;padding:.6rem .8rem;border-radius:10px;font-size:.95rem;background:#1f2937;}
-    .alert.err{border:1px solid rgba(220,38,38,.45);color:#fecaca;background:rgba(220,38,38,.12);}
-    .grid{display:grid;gap:12px;}
-    .grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr));}
-    .tile{background:rgba(2,6,23,.55);border:1px solid rgba(255,255,255,.05);padding:14px;border-radius:12px;cursor:pointer;}
-    .tile h3{margin:.2rem 0 .4rem 0;font-size:1rem;}
-    .tile .v{color:#e2e8f0;font-weight:700;}
-    .footer{margin-top:12px;color:#94a3b8;font-size:.85rem;text-align:center;}
-    .back{display:inline-flex;gap:8px;align-items:center;color:#93c5fd;cursor:pointer;margin-bottom:12px;}
-    canvas{width:100%!important;height:200px!important;}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gohar Zamin – Factory Monitor</title>
+<style>
+  :root{
+    --brand:#003087; --bg:#0f172a; --card:#111827;
+    --muted:#94a3b8; --text:#e5e7eb; --accent:#2563eb;
+    --ok:#16a34a; --danger:#dc2626; --shadow:0 10px 30px rgba(0,0,0,.25);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Vazirmatn,Arial,sans-serif;color:var(--text);}
+  body{display:flex;align-items:center;justify-content:center;background: linear-gradient(180deg,#0a0f1f 0%,#0f172a 100%);}
+  .card{width:min(520px,92vw);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;}
+  .center{display:flex;align-items:center;justify-content:center;}
+  .logo{width:120px;height:120px;border-radius:50%;background:var(--brand);display:grid;place-items:center;margin:24px auto 16px;}
+  .logo span{font-size:44px;font-weight:800;color:white;}
+  h1{margin:.25rem 0 1rem;text-align:center;}
+  p.muted{color:var(--muted);text-align:center;margin:.25rem 0 1.25rem;}
+  label{display:block;font-size:.95rem;margin:.5rem 0 .35rem;color:#cbd5e1;}
+  input,textarea{width:100%;padding:12px 14px;background:#0b1324;color:var(--text);border:1px solid rgba(255,255,255,.08);border-radius:10px;outline:none;}
+  input:focus,textarea:focus{border-color:#334155;box-shadow:0 0 0 3px rgba(37,99,235,.25);}
+  .btn{width:100%;margin-top:14px;padding:12px 16px;border-radius:10px;border:none;color:white;background:linear-gradient(90deg,#2563eb,#1d4ed8);cursor:pointer;font-size:1rem;font-weight:700;box-shadow:0 8px 26px rgba(37,99,235,.35);}
+  .btn:active{transform: translateY(1px);}
+  .alert{margin:.5rem 0;padding:.6rem .8rem;border-radius:10px;font-size:.95rem;background:#1f2937;}
+  .alert.err{border:1px solid rgba(220,38,38,.45);color:#fecaca;background:rgba(220,38,38,.12);}
+  .grid{display:grid;gap:12px;}
+  .grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr));}
+  .tile{background:rgba(2,6,23,.55);border:1px solid rgba(255,255,255,.05);padding:14px;border-radius:12px;cursor:pointer;}
+  .tile h3{margin:.2rem 0 .4rem 0;font-size:1rem;}
+  .tile .v{color:#e2e8f0;font-weight:700;}
+  .footer{margin-top:12px;color:#94a3b8;font-size:.85rem;text-align:center;}
+  .back{display:inline-flex;gap:8px;align-items:center;color:#93c5fd;cursor:pointer;margin-bottom:12px;}
+  canvas{width:100%!important;height:200px!important;}
+  textarea{resize:vertical;}
+</style>
 </head>
 <body>
 
+<!-- Login -->
 <div id="screen-login" class="card">
   <div class="logo"><span>GZ</span></div>
   <h1>ورود به سامانه مانیتورینگ</h1>
@@ -51,28 +53,45 @@
   <div class="footer">© Gohar Zamin • Demo</div>
 </div>
 
-<div id="screen-shifts" class="card" style="display:none;">
+<!-- Units -->
+<div id="screen-units" class="card" style="display:none;">
   <div class="back" id="back-to-login">← خروج</div>
-  <h1>شیفت‌های کارخانه گندله‌سازی</h1>
-  <div class="grid" id="shift-grid"></div>
-  <div class="footer">انتخاب شیفت برای مشاهده KPI</div>
+  <h1>واحدهای شرکت</h1>
+  <div class="grid" id="unit-grid"></div>
 </div>
 
+<!-- Shifts -->
+<div id="screen-shifts" class="card" style="display:none;">
+  <div class="back" id="back-to-units">← بازگشت به واحدها</div>
+  <h1 id="unit-title">شیفت‌ها</h1>
+  <div class="grid" id="shift-grid"></div>
+</div>
+
+<!-- Shift Details -->
 <div id="screen-details" class="card" style="display:none;">
   <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
   <h1 id="shift-title">جزئیات شیفت</h1>
   <div class="grid kpi" id="kpi-grid"></div>
   <canvas id="kpi-chart"></canvas>
+  <h3>گزارش شیفت</h3>
+  <textarea id="shift-report" rows="4" placeholder="گزارش خود را وارد کنید..."></textarea>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   function showScreen(name){
     document.getElementById('screen-login').style.display=(name==='login')?'block':'none';
+    document.getElementById('screen-units').style.display=(name==='units')?'block':'none';
     document.getElementById('screen-shifts').style.display=(name==='shifts')?'block':'none';
     document.getElementById('screen-details').style.display=(name==='details')?'block':'none';
   }
 
+  // واحدها
+  const units=[
+    'معدن','فرآوری و خردایش','گندله‌سازی','انرژی و سیالات','آزمایشگاه'
+  ];
+
+  // شیفت‌ها
   const shifts=[
     {name:'A', time:'07:00 - 15:00', leader:'آقای سعید'},
     {name:'B', time:'15:00 - 23:00', leader:'آقای نورمندی'},
@@ -80,6 +99,7 @@
     {name:'D', time:'استراحت', leader:'آقای روح الامینی'}
   ];
 
+  // داده‌های KPI نمونه
   const mockData={
     'درصد رطوبت':[8.2,10,9,7],
     'درصد FeO':[12.5,11,13,12],
@@ -89,13 +109,15 @@
   };
 
   let chart=null;
+  let currentUnit='';
 
+  // ورود
   document.getElementById('btn-login').addEventListener('click',()=>{
     const u=document.getElementById('username').value.trim();
     const p=document.getElementById('password').value.trim();
     if(u==='admin' && p==='123'){
-      showScreen('shifts');
-      renderShifts();
+      showScreen('units');
+      renderUnits();
     }else{
       const alertBox=document.getElementById('login-alert');
       alertBox.style.display='block';
@@ -103,10 +125,29 @@
     }
   });
 
+  // بازگشت‌ها
   document.getElementById('back-to-login').addEventListener('click',()=>showScreen('login'));
+  document.getElementById('back-to-units').addEventListener('click',()=>showScreen('units'));
   document.getElementById('back-to-shifts').addEventListener('click',()=>showScreen('shifts'));
 
-  function renderShifts(){
+  function renderUnits(){
+    const grid=document.getElementById('unit-grid');
+    grid.innerHTML='';
+    units.forEach(u=>{
+      const btn=document.createElement('button');
+      btn.className='btn';
+      btn.textContent='واحد '+u;
+      btn.addEventListener('click',()=>{
+        currentUnit=u;
+        renderShiftsForUnit(u);
+        showScreen('shifts');
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function renderShiftsForUnit(unit){
+    document.getElementById('unit-title').textContent='شیفت‌های واحد '+unit;
     const grid=document.getElementById('shift-grid');
     grid.innerHTML='';
     shifts.forEach(s=>{
@@ -127,13 +168,11 @@
       const tile=document.createElement('div');
       tile.className='tile';
       tile.innerHTML=`<h3>${k}</h3><div class="v">${v[0]}</div>`;
-      tile.addEventListener('click',()=>{
-        renderChart(k,v);
-      });
+      tile.addEventListener('click',()=>renderChart(k,v));
       kpiGrid.appendChild(tile);
     });
-    // نمایش پیش‌فرض اولین نمودار
     renderChart(Object.keys(mockData)[0],Object.values(mockData)[0]);
+    document.getElementById('shift-report').value='';
   }
 
   function renderChart(label, data){

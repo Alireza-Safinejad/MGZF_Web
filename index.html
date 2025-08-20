@@ -46,8 +46,6 @@
       border:1px solid rgba(255,255,255,.08); border-radius:10px; outline:none;
     }
     input:focus{border-color:#334155; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
-    .row{display:flex; gap:12px}
-    .row>*{flex:1}
     .btn{
       width:100%; margin-top:14px; padding:12px 16px; border-radius:10px; border:none; color:white; background:linear-gradient(90deg,#2563eb,#1d4ed8);
       cursor:pointer; font-size:1rem; font-weight:700; letter-spacing:.3px; box-shadow:0 8px 26px rgba(37,99,235,.35);
@@ -70,7 +68,6 @@
     }
     .footer{margin-top:12px; color:#94a3b8; font-size:.85rem; text-align:center}
     .back{display:inline-flex; gap:8px; align-items:center; color:#93c5fd; cursor:pointer; margin-bottom:12px}
-    /* Splash full-screen */
     #splash{position:fixed; inset:0; display:grid; place-items:center; background: radial-gradient(900px 500px at 120% -20%, #0b1530 0%, transparent 60%), #0a0f1f; z-index:10}
     #splash.fade{animation: fadeout .5s ease forwards}
     @keyframes fadeout{to{opacity:0; visibility:hidden}}
@@ -120,64 +117,46 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // --- Mock device id
     const devId = localStorage.getItem('mgzf_dev_id') || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
     localStorage.setItem('mgzf_dev_id', devId);
-    document.getElementById('dev-id').textContent = devId.slice(0, 8);
+    document.getElementById('dev-id').textContent = devId.slice(0,8);
 
-    // --- Splash 2s then show login
     setTimeout(() => {
       document.getElementById('splash').classList.add('fade');
       setTimeout(()=> showScreen('login'), 350);
     }, 2000);
 
-    // --- Screens controller
     function showScreen(name){
       document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
       document.getElementById('screen-shifts').style.display = (name==='shifts')?'block':'none';
       document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
-      // پاک کردن نمودارها هنگام رفتن به صفحه قبل
-      if(name!=='details'){
-        document.getElementById('kpi-grid').innerHTML='';
-        document.getElementById('kpi-chart-container').innerHTML='';
-        chartInstances={};
-      }
     }
 
-    // --- Login
-    const allowedDevices = [];
     document.getElementById('btn-login').addEventListener('click', ()=>{
       const u = document.getElementById('username').value.trim();
       const p = document.getElementById('password').value.trim();
       const alertBox = document.getElementById('login-alert');
-      if (allowedDevices.length && !allowedDevices.includes(devId)) {
-        alertBox.textContent = 'دستگاه مجاز نیست';
-        alertBox.style.display = 'block';
-        return;
-      }
-      if (u==='admin' && p==='123'){
+      if(u==='admin' && p==='123'){
         alertBox.style.display='none';
         renderShifts();
         showScreen('shifts');
       } else {
-        alertBox.textContent = 'نام کاربری یا رمز اشتباه است';
-        alertBox.style.display = 'block';
+        alertBox.textContent='نام کاربری یا رمز اشتباه است';
+        alertBox.style.display='block';
       }
     });
 
     document.getElementById('back-to-login').addEventListener('click', ()=> showScreen('login'));
     document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
 
-    // --- Shift definitions
-    const shifts = [
+    const shifts=[
       {name:'A', time:'07:00 - 15:00', leader:'آقای سعید'},
       {name:'B', time:'15:00 - 23:00', leader:'آقای نورمندی'},
       {name:'C', time:'23:00 - 07:00', leader:'آقای امامی'},
       {name:'D', time:'استراحت', leader:'آقای روح الامینی'}
     ];
 
-    // --- Mock KPI data
-    const mockData = {
+    const mockData={
       'آلارم‌ها':'آلارم سنسور 1، آلارم رطوبت بالا',
       'توقفات':'توقف 2 ساعته در خط تولید',
       'درصد رطوبت':'8.2%',
@@ -190,12 +169,12 @@
     let chartInstances={};
 
     function renderShifts(){
-      const grid = document.getElementById('shift-grid');
+      const grid=document.getElementById('shift-grid');
       grid.innerHTML='';
       shifts.forEach(s=>{
-        const btn = document.createElement('button');
+        const btn=document.createElement('button');
         btn.className='btn';
-        btn.textContent = `شیفت ${s.name} • ${s.time} • سرپرست: ${s.leader}`;
+        btn.textContent=`شیفت ${s.name} • ${s.time} • سرپرست: ${s.leader}`;
         btn.addEventListener('click', ()=>{
           renderShift(s);
           showScreen('details');
@@ -206,13 +185,14 @@
 
     function renderShift(shift){
       document.getElementById('shift-title').textContent='جزئیات شیفت '+shift.name;
-      const grid = document.getElementById('kpi-grid');
+      const grid=document.getElementById('kpi-grid');
+      const container=document.getElementById('kpi-chart-container');
       grid.innerHTML='';
-      document.getElementById('kpi-chart-container').innerHTML='';
+      container.innerHTML='';
       chartInstances={};
 
       Object.entries(mockData).forEach(([k,v])=>{
-        const el = document.createElement('div');
+        const el=document.createElement('div');
         el.className='tile';
         el.innerHTML=`<h3>${k}</h3><div class="v">${v}</div>`;
         el.addEventListener('click', ()=>{
@@ -223,7 +203,7 @@
     }
 
     function renderKPIChart(kpiName, kpiValue){
-      const container = document.getElementById('kpi-chart-container');
+      const container=document.getElementById('kpi-chart-container');
       container.innerHTML='';
       if(chartInstances[kpiName]) chartInstances[kpiName].destroy();
       const canvas=document.createElement('canvas');
@@ -242,7 +222,6 @@
         options:{responsive:true, maintainAspectRatio:false}
       });
     }
-
   </script>
 </body>
 </html>

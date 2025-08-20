@@ -1,196 +1,226 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gohar Zamin – Factory Monitor</title>
-<style>
-:root{--brand:#003087;--bg:#0f172a;--card:#111827;--muted:#94a3b8;--text:#e5e7eb;--accent:#2563eb;--ok:#16a34a;--danger:#dc2626;--shadow:0 10px 30px rgba(0,0,0,.25);--radius:14px;}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Vazirmatn,Arial,sans-serif;color:var(--text);}
-body{display:flex;align-items:center;justify-content:center;background: linear-gradient(180deg,#0a0f1f 0%,#0f172a 100%);}
-.card{width:min(520px,92vw);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;}
-.center{display:flex;align-items:center;justify-content:center;}
-.logo{width:120px;height:120px;border-radius:50%;background:var(--brand);display:grid;place-items:center;margin:24px auto 16px;}
-.logo span{font-size:44px;font-weight:800;color:white;}
-h1{margin:.25rem 0 1rem;text-align:center;}
-p.muted{color:var(--muted);text-align:center;margin:.25rem 0 1.25rem;}
-label{display:block;font-size:.95rem;margin:.5rem 0 .35rem;color:#cbd5e1;}
-input,textarea{width:100%;padding:12px 14px;background:#0b1324;color:var(--text);border:1px solid rgba(255,255,255,.08);border-radius:10px;outline:none;}
-input:focus,textarea:focus{border-color:#334155;box-shadow:0 0 0 3px rgba(37,99,235,.25);}
-.btn{width:100%;margin-top:14px;padding:12px 16px;border-radius:10px;border:none;color:white;background:linear-gradient(90deg,#2563eb,#1d4ed8);cursor:pointer;font-size:1rem;font-weight:700;box-shadow:0 8px 26px rgba(37,99,235,.35);}
-.btn:active{transform: translateY(1px);}
-.alert{margin:.5rem 0;padding:.6rem .8rem;border-radius:10px;font-size:.95rem;background:#1f2937;}
-.alert.err{border:1px solid rgba(220,38,38,.45);color:#fecaca;background:rgba(220,38,38,.12);}
-.grid{display:grid;gap:12px;}
-.grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr));}
-.tile{background:rgba(2,6,23,.55);border:1px solid rgba(255,255,255,.05);padding:14px;border-radius:12px;cursor:pointer;}
-.tile h3{margin:.2rem 0 .4rem 0;font-size:1rem;}
-.tile .v{color:#e2e8f0;font-weight:700;}
-.footer{margin-top:12px;color:#94a3b8;font-size:.85rem;text-align:center;}
-.back{display:inline-flex;gap:8px;align-items:center;color:#93c5fd;cursor:pointer;margin-bottom:12px;}
-canvas{width:100%!important;height:200px!important;}
-textarea{resize:vertical;}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سامانه شیفت شرکت گهرزمین</title>
+  <style>
+    :root{
+      --brand:#003087;
+      --bg:#0f172a;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --danger:#dc2626;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 120% -10%, #0b1530 0%, transparent 60%),
+                  radial-gradient(1000px 800px at -10% 110%, #13223f 0%, transparent 60%),
+                  linear-gradient(180deg,#0a0f1f 0%, #0f172a 100%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Vazirmatn", Arial, sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card{
+      width:min(520px,92vw);
+      background:rgba(17,24,39,.65);
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px;
+    }
+    .center{display:flex; align-items:center; justify-content:center}
+    .logo{
+      width:120px; height:120px; border-radius:50%; background:var(--brand);
+      display:grid; place-items:center; box-shadow:0 12px 40px rgba(0,48,135,.45), inset 0 0 0 6px rgba(255,255,255,.08);
+      margin:24px auto 16px;
+    }
+    .logo img{width:80px; height:80px; border-radius:50%;}
+    h1{margin:.25rem 0 1rem 0; font-size:1.4rem; text-align:center}
+    p.muted{color:var(--muted); text-align:center; margin:.25rem 0 1.25rem 0}
+    label{display:block; font-size:.95rem; margin:.5rem 0 .35rem 0; color:#cbd5e1}
+    input{width:100%; padding:12px 14px; background:#0b1324; color:var(--text);
+      border:1px solid rgba(255,255,255,.08); border-radius:10px; outline:none;}
+    input:focus{border-color:#334155; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+    .row{display:flex; gap:12px}
+    .row>*{flex:1}
+    .btn{width:100%; margin-top:14px; padding:12px 16px; border-radius:10px; border:none;
+      color:white; background:linear-gradient(90deg,#2563eb,#1d4ed8);
+      cursor:pointer; font-size:1rem; font-weight:700; letter-spacing:.3px;
+      box-shadow:0 8px 26px rgba(37,99,235,.35);}
+    .btn:active{transform: translateY(1px)}
+    .alert{margin:.5rem 0; padding:.6rem .8rem; border-radius:10px; font-size:.95rem; background:#1f2937}
+    .alert.ok{border:1px solid rgba(22,163,74,.45); color:#bbf7d0; background:rgba(22,163,74,.12)}
+    .alert.err{border:1px solid rgba(220,38,38,.45); color:#fecaca; background:rgba(220,38,38,.12)}
+    .grid{display:grid; gap:12px}
+    .grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr))}
+    .tile{background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.05);
+      padding:14px; border-radius:12px;}
+    .tile h3{margin:.2rem 0 .4rem 0; font-size:1rem}
+    .tile .v{color:#e2e8f0; font-weight:700}
+    .ghost{padding:10px 14px; border-radius:10px; border:1px dashed rgba(148,163,184,.35);
+      color:#cbd5e1; text-align:center; margin-top:8px;}
+    .footer{margin-top:12px; color:#94a3b8; font-size:.85rem; text-align:center}
+    .back{display:inline-flex; gap:8px; align-items:center; color:#93c5fd; cursor:pointer; margin-bottom:12px}
+    #splash{position:fixed; inset:0; display:grid; place-items:center; background: radial-gradient(900px 500px at 120% -20%, #0b1530 0%, transparent 60%), #0a0f1f; z-index:10}
+    #splash.fade{animation: fadeout .5s ease forwards}
+    @keyframes fadeout{to{opacity:0; visibility:hidden}}
+  </style>
 </head>
 <body>
+  <!-- Splash -->
+  <div id="splash">
+    <div class="center" style="flex-direction:column">
+      <div class="logo"><img src="Gz.PNG" alt="Gohar Zamin"></div>
+      <p class="muted">در حال آماده‌سازی…</p>
+    </div>
+  </div>
 
-<!-- Login -->
-<div id="screen-login" class="card">
-  <div class="logo"><span>GZ</span></div>
-  <h1>ورود به سامانه مانیتورینگ</h1>
-  <label>نام کاربری</label>
-  <input id="username" placeholder="مثلاً: admin" autocomplete="username">
-  <label>رمز عبور</label>
-  <input id="password" type="password" placeholder="مثلاً: 123" autocomplete="current-password">
-  <button id="btn-login" class="btn">ورود</button>
-  <div class="alert err" id="login-alert" style="display:none"></div>
-  <div class="footer">© Gohar Zamin • Demo</div>
-</div>
+  <!-- Login -->
+  <div id="screen-login" class="card" style="display:none">
+    <div class="logo"><img src="Gz.PNG" alt="Gohar Zamin"></div>
+    <h1>ورود به سامانه شیفت شرکت گهرزمین</h1>
+    <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
+    <div id="login-alert" class="alert err" style="display:none"></div>
+    <label>نام کاربری</label>
+    <input id="username" placeholder="مثلاً: admin" autocomplete="username">
+    <label>رمز عبور</label>
+    <input id="password" type="password" placeholder="مثلاً: 123" autocomplete="current-password">
+    <button id="btn-login" class="btn">ورود</button>
+    <div class="ghost" id="devline">Device: Web • ID (mock): <span id="dev-id">—</span></div>
+    <div class="footer">© Gohar Zamin • Demo</div>
+  </div>
 
-<!-- Units -->
-<div id="screen-units" class="card" style="display:none;">
-  <div class="back" id="back-to-login">← خروج</div>
-  <h1>واحدهای شرکت</h1>
-  <div class="grid" id="unit-grid"></div>
-</div>
+  <!-- Units Selection -->
+  <div id="screen-units" class="card" style="display:none">
+    <h1>واحدهای شرکت گهرزمین</h1>
+    <div class="grid">
+      <button class="btn unit-btn" data-unit="Gondole">واحد گندله‌سازی</button>
+      <button class="btn unit-btn" data-unit="Energy">واحد انرژی و سیالات</button>
+      <button class="btn unit-btn" data-unit="Process">واحد فرآوری و خردایش</button>
+      <button class="btn unit-btn" data-unit="Mine">واحد معدن</button>
+      <button class="btn unit-btn" data-unit="Lab">واحد آزمایشگاه</button>
+    </div>
+  </div>
 
-<!-- Shifts -->
-<div id="screen-shifts" class="card" style="display:none;">
-  <div class="back" id="back-to-units">← بازگشت به واحدها</div>
-  <h1 id="unit-title">شیفت‌ها</h1>
-  <div class="grid" id="shift-grid"></div>
-</div>
+  <!-- Shifts Screen -->
+  <div id="screen-shifts" class="card" style="display:none">
+    <div class="back" id="back-to-units">← بازگشت به واحدها</div>
+    <h1 id="unit-title">شیفت‌های واحد</h1>
+    <div class="grid">
+      <button class="btn shift-btn" data-shift="A">شیفت A</button>
+      <button class="btn shift-btn" data-shift="B">شیفت B</button>
+      <button class="btn shift-btn" data-shift="C">شیفت C</button>
+      <button class="btn shift-btn" data-shift="D">شیفت D</button>
+    </div>
+    <div class="footer">انتخاب شیفت برای مشاهده KPI و گزارش</div>
+  </div>
 
-<!-- Shift Details -->
-<div id="screen-details" class="card" style="display:none;">
-  <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
-  <h1 id="shift-title">جزئیات شیفت</h1>
-  <div class="grid kpi" id="kpi-grid"></div>
-  <canvas id="kpi-chart"></canvas>
-  <h3>گزارش شیفت</h3>
-  <textarea id="shift-report" rows="4" placeholder="گزارش خود را وارد کنید..."></textarea>
-</div>
+  <!-- KPI & Report Screen -->
+  <div id="screen-details" class="card" style="display:none">
+    <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
+    <h1 id="shift-title">جزئیات شیفت</h1>
+    <div class="grid kpi" id="kpi-grid"></div>
+    <h3>گزارش شیفت</h3>
+    <p id="shift-report">گزارش به روز رسانی خواهد شد.</p>
+    <label>نظر مدیر واحد</label>
+    <input id="manager-comment" placeholder="نظر خود را وارد کنید...">
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-// --- Utility ---
-function showScreen(name){
-  document.getElementById('screen-login').style.display=(name==='login')?'block':'none';
-  document.getElementById('screen-units').style.display=(name==='units')?'block':'none';
-  document.getElementById('screen-shifts').style.display=(name==='shifts')?'block':'none';
-  document.getElementById('screen-details').style.display=(name==='details')?'block':'none';
-}
+  <script>
+    const devId = localStorage.getItem('mgzf_dev_id') || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
+    localStorage.setItem('mgzf_dev_id', devId);
+    document.getElementById('dev-id').textContent = devId.slice(0,8);
 
-// --- Data ---
-const units=['معدن','فرآوری و خردایش','گندله‌سازی','انرژی و سیالات','آزمایشگاه'];
+    // Splash
+    setTimeout(()=>{ document.getElementById('splash').classList.add('fade'); setTimeout(()=>showScreen('login'),350); },2000);
 
-// شیفت‌ها برای هر واحد
-const shiftsData={
-  'گندله‌سازی':[
-    {name:'A',time:'07:00-15:00',leader:'آقای سعید',kpi:{'درصد رطوبت':[8.2,10,9,7],'درصد FeO':[12.5,11,13,12],'میزان بلین':[3500,3600,3400,3550],'میزان تولید':[500,520,480,510],'میزان ریجکتی':[2.1,1.9,2.5,2.0]}},
-    {name:'B',time:'15:00-23:00',leader:'آقای نورمندی',kpi:{'درصد رطوبت':[8.2,10,9,7],'درصد FeO':[12.5,11,13,12],'میزان بلین':[3500,3600,3400,3550],'میزان تولید':[500,520,480,510],'میزان ریجکتی':[2.1,1.9,2.5,2.0]}},
-    {name:'C',time:'23:00-07:00',leader:'آقای امامی',kpi:{'درصد رطوبت':[8.2,10,9,7],'درصد FeO':[12.5,11,13,12],'میزان بلین':[3500,3600,3400,3550],'میزان تولید':[500,520,480,510],'میزان ریجکتی':[2.1,1.9,2.5,2.0]}},
-    {name:'D',time:'استراحت',leader:'آقای روح الامینی',kpi:{'درصد رطوبت':[8.2,10,9,7],'درصد FeO':[12.5,11,13,12],'میزان بلین':[3500,3600,3400,3550],'میزان تولید':[500,520,480,510],'میزان ریجکتی':[2.1,1.9,2.5,2.0]}}
-  ],
-  'انرژی و سیالات':[
-    {name:'A',time:'07:00-15:00',leader:'حسن',kpi:{'گاز':[50,50,50,50],'برق':[80,80,80,80],'آب':[50,50,50,50]}},
-    {name:'B',time:'15:00-23:00',leader:'حاج رضا',kpi:{'گاز':[50,50,50,50],'برق':[80,80,80,80],'آب':[50,50,50,50]}},
-    {name:'C',time:'23:00-07:00',leader:'کریمی',kpi:{'گاز':[50,50,50,50],'برق':[80,80,80,80],'آب':[50,50,50,50]}},
-    {name:'D',time:'استراحت',leader:'مجیدی',kpi:{'گاز':[50,50,50,50],'برق':[80,80,80,80],'آب':[50,50,50,50]}}
-  ],
-  'فرآوری و خردایش':[
-    {name:'A',time:'07:00-15:00',leader:'کوچولو',kpi:{'درصد رطوبت':[5,6,5,5],'درصد FeO':[10,11,12,9],'میزان بلین':[3000,3100,3050,3200]}},
-    {name:'B',time:'15:00-23:00',leader:'فرهاد',kpi:{'درصد رطوبت':[5,6,5,5],'درصد FeO':[10,11,12,9],'میزان بلین':[3000,3100,3050,3200]}},
-    {name:'C',time:'23:00-07:00',leader:'طوسی',kpi:{'درصد رطوبت':[5,6,5,5],'درصد FeO':[10,11,12,9],'میزان بلین':[3000,3100,3050,3200]}},
-    {name:'D',time:'استراحت',leader:'ملکشاهی',kpi:{'درصد رطوبت':[5,6,5,5],'درصد FeO':[10,11,12,9],'میزان بلین':[3000,3100,3050,3200]}}
-  ],
-  'معدن':[ // نمونه
-    {name:'A',time:'07:00-15:00',leader:'سرپرست معدن',kpi:{'درصد رطوبت':[7,6,8,7],'درصد Fe':[50,52,49,51]}},
-    {name:'B',time:'15:00-23:00',leader:'سرپرست معدن',kpi:{'درصد رطوبت':[7,6,8,7],'درصد Fe':[50,52,49,51]}},
-    {name:'C',time:'23:00-07:00',leader:'سرپرست معدن',kpi:{'درصد رطوبت':[7,6,8,7],'درصد Fe':[50,52,49,51]}},
-    {name:'D',time:'استراحت',leader:'سرپرست معدن',kpi:{'درصد رطوبت':[7,6,8,7],'درصد Fe':[50,52,49,51]}}
-  ],
-  'آزمایشگاه':[ // نمونه
-    {name:'A',time:'07:00-15:00',leader:'سرپرست آزمایشگاه',kpi:{'دما':[22,23,21,22],'رطوبت':[50,52,48,51]}},
-    {name:'B',time:'15:00-23:00',leader:'سرپرست آزمایشگاه',kpi:{'دما':[22,23,21,22],'رطوبت':[50,52,48,51]}},
-    {name:'C',time:'23:00-07:00',leader:'سرپرست آزمایشگاه',kpi:{'دما':[22,23,21,22],'رطوبت':[50,52,48,51]}},
-    {name:'D',time:'استراحت',leader:'سرپرست آزمایشگاه',kpi:{'دما':[22,23,21,22],'رطوبت':[50,52,48,51]}}
-  ]
-};
+    // --- Screens Controller
+    function showScreen(name){
+      document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
+      document.getElementById('screen-units').style.display = (name==='units')?'block':'none';
+      document.getElementById('screen-shifts').style.display = (name==='shifts')?'block':'none';
+      document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
+    }
 
-let chart=null;
-let currentUnit='';
-
-// --- Login ---
-document.getElementById('btn-login').addEventListener('click',()=>{
-  const u=document.getElementById('username').value.trim();
-  const p=document.getElementById('password').value.trim();
-  if(u==='admin' && p==='123'){
-    showScreen('units'); renderUnits();
-  }else{
-    const alertBox=document.getElementById('login-alert');
-    alertBox.style.display='block'; alertBox.textContent='نام کاربری یا رمز اشتباه است';
-  }
-});
-
-// --- Back buttons ---
-document.getElementById('back-to-login').addEventListener('click',()=>showScreen('login'));
-document.getElementById('back-to-units').addEventListener('click',()=>showScreen('units'));
-document.getElementById('back-to-shifts').addEventListener('click',()=>showScreen('shifts'));
-
-// --- Render Units ---
-function renderUnits(){
-  const grid=document.getElementById('unit-grid');
-  grid.innerHTML='';
-  units.forEach(u=>{
-    const btn=document.createElement('button');
-    btn.className='btn'; btn.textContent='واحد '+u;
-    btn.addEventListener('click',()=>{
-      currentUnit=u; renderShifts(u); showScreen('shifts');
+    // Login
+    document.getElementById('btn-login').addEventListener('click', ()=>{
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      const alertBox = document.getElementById('login-alert');
+      if(u==='admin' && p==='123'){
+        alertBox.style.display='none';
+        showScreen('units');
+      } else {
+        alertBox.textContent='نام کاربری یا رمز اشتباه است';
+        alertBox.style.display='block';
+      }
     });
-    grid.appendChild(btn);
-  });
-}
 
-// --- Render Shifts ---
-function renderShifts(unit){
-  document.getElementById('unit-title').textContent='شیفت‌های واحد '+unit;
-  const grid=document.getElementById('shift-grid');
-  grid.innerHTML='';
-  shiftsData[unit].forEach(shift=>{
-    const btn=document.createElement('button');
-    btn.className='btn'; btn.textContent=`شیفت ${shift.name} • ${shift.leader}`;
-    btn.addEventListener('click',()=>renderShiftDetails(shift));
-    grid.appendChild(btn);
-  });
-}
+    // Units click
+    document.querySelectorAll('.unit-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const unit = btn.dataset.unit;
+        document.getElementById('unit-title').textContent = 'شیفت‌های واحد ' + btn.textContent;
+        currentUnit = unit;
+        showScreen('shifts');
+      });
+    });
 
-// --- Render Shift Details ---
-function renderShiftDetails(shift){
-  showScreen('details');
-  document.getElementById('shift-title').textContent=`شیفت ${shift.name} • سرپرست: ${shift.leader}`;
-  const kpiGrid=document.getElementById('kpi-grid'); kpiGrid.innerHTML='';
-  Object.entries(shift.kpi).forEach(([k,v])=>{
-    const tile=document.createElement('div'); tile.className='tile';
-    tile.innerHTML=`<h3>${k}</h3><div class="v">${v[0]}</div>`;
-    tile.addEventListener('click',()=>renderChart(k,v));
-    kpiGrid.appendChild(tile);
-  });
-  renderChart(Object.keys(shift.kpi)[0],Object.values(shift.kpi)[0]);
-  document.getElementById('shift-report').value='';
-}
+    document.getElementById('back-to-units').addEventListener('click',()=>showScreen('units'));
+    document.getElementById('back-to-shifts').addEventListener('click',()=>showScreen('shifts'));
 
-// --- Render Chart ---
-function renderChart(label,data){
-  const ctx=document.getElementById('kpi-chart').getContext('2d');
-  if(chart) chart.destroy();
-  chart=new Chart(ctx,{
-    type:'bar',
-    data:{labels:['روز1','روز2','روز3','روز4'],datasets:[{label:label,data:data,backgroundColor:'#2563eb'}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}}}
-  });
-}
-</script>
+    let currentUnit = '';
+    const unitData = {
+      "Gondole": {
+        A:{name:"سعید", time:"07:00-15:00", kpi:{'درصد رطوبت':'8.2%','درصد FeO':'12.5%','میزان بلین':'3500','میزان تولید در ساعت':'500 تن','میزان ریجکتی':'2.1%'}},
+        B:{name:"نورمندی", time:"15:00-23:00", kpi:{'درصد رطوبت':'8.5%','درصد FeO':'12.2%','میزان بلین':'3600','میزان تولید در ساعت':'520 تن','میزان ریجکتی':'2.0%'}},
+        C:{name:"امامی", time:"23:00-07:00", kpi:{'درصد رطوبت':'7.8%','درصد FeO':'12.8%','میزان بلین':'3400','میزان تولید در ساعت':'480 تن','میزان ریجکتی':'2.5%'}},
+        D:{name:"روح الامینی", time:"استراحت", kpi:{}}
+      },
+      "Energy": {
+        A:{name:"حسن", time:"07:00-15:00", kpi:{'میزان گاز مصرفی':'50%','برق مصرفی':'80%','آب مصرفی':'50%'}},
+        B:{name:"حاج رضا", time:"15:00-23:00", kpi:{'میزان گاز مصرفی':'52%','برق مصرفی':'78%','آب مصرفی':'51%'}},
+        C:{name:"کریمی", time:"23:00-07:00", kpi:{'میزان گاز مصرفی':'48%','برق مصرفی':'79%','آب مصرفی':'50%'}},
+        D:{name:"مجیدی", time:"استراحت", kpi:{}}
+      },
+      "Process": {
+        A:{name:"کوچولو", time:"07:00-15:00", kpi:{'درصد رطوبت':'10%','درصد FeO':'11%','میزان بلین':'4000'}},
+        B:{name:"فرهاد", time:"15:00-23:00", kpi:{'درصد رطوبت':'9%','درصد FeO':'10%','میزان بلین':'3900'}},
+        C:{name:"طوسی", time:"23:00-07:00", kpi:{'درصد رطوبت':'8%','درصد FeO':'12%','میزان بلین':'3700'}},
+        D:{name:"ملکشاهی", time:"استراحت", kpi:{}}
+      },
+      "Mine": {}, "Lab": {}
+    };
+
+    document.querySelectorAll('.shift-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const shift = btn.dataset.shift;
+        const data = unitData[currentUnit][shift];
+        document.getElementById('shift-title').textContent = 'شیفت ' + shift + ' (' + data.time + ') – سرپرست: ' + data.name;
+        const grid = document.getElementById('kpi-grid');
+        grid.innerHTML = '';
+        Object.entries(data.kpi).forEach(([k,v])=>{
+          const el = document.createElement('div');
+          el.className='tile';
+          el.innerHTML=`<h3>${k}</h3><div class="v">${v}</div>`;
+          grid.appendChild(el);
+        });
+        document.getElementById('shift-report').textContent = 'گزارش به روز رسانی خواهد شد.';
+        document.getElementById('manager-comment').value = '';
+        showScreen('details');
+      });
+    });
+  </script>
 </body>
 </html>

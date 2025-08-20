@@ -89,6 +89,11 @@ button, input {
   display:block;
   margin:0.5rem auto;
 }
+.login-container button {
+  width: 50%;
+  display:block;
+  margin:0.5rem auto;
+}
 .hidden { display:none; }
 .back-btn {
   background-color: var(--highlight);
@@ -115,7 +120,7 @@ button, input {
 
 <!-- صفحه لاگین -->
 <div id="loginPage" class="login-container">
-  <img src="Gz.PNG" alt="لوگو" style="max-width:100px; margin-bottom:1rem;">
+  <img src="Gz.PNG" alt="لوگو" style="width:50px; margin-bottom:1rem;">
   <div>ورود به سامانه شیفت شرکت معدنی و صنعتی گهرزمین</div>
   <input type="text" id="username" placeholder="نام کاربری">
   <input type="password" id="password" placeholder="رمز عبور">
@@ -145,7 +150,6 @@ button, input {
 </div>
 
 <script>
-// داده‌ها
 const units = [
   { name:'واحد معدن', type:'general', shifts:[
     {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
@@ -182,8 +186,6 @@ const units = [
 let isManager=false;
 let currentUnit=null;
 let currentShift=null;
-
-// تعیین واحد هر مدیر
 const managerUnitMap = {1:0,2:1,3:2,4:3,5:4};
 
 // لاگین
@@ -228,7 +230,7 @@ function showShiftsPage(){
   document.getElementById('shiftUnitName').textContent=units[currentUnit].name;
   units[currentUnit].shifts.forEach((shift,idx)=>{
     const btn=document.createElement('button');
-    btn.textContent=`شیفت ${shift.name} | ${shift.time} | مسئول: ${shift.supervisor}`;
+    btn.textContent=`شیفت ${shift.name} | سرپرست: ${shift.supervisor}`;
     btn.onclick=()=>{ currentShift=idx; showDetailsPage(); };
     listDiv.appendChild(btn);
   });
@@ -284,9 +286,19 @@ function showDetailsPage(){
 }
 
 // بازگشت
-function goBackLogin(){ document.getElementById('unitsPage').classList.add('hidden'); document.getElementById('loginPage').classList.remove('hidden'); }
-function goBackUnits(){ document.getElementById('shiftsPage').classList.add('hidden'); if(!isManager) showUnitsPage(); else showShiftsPage(); }
-function goBackShifts(){ document.getElementById('detailsPage').classList.add('hidden'); showShiftsPage(); }
+function goBackLogin(){ 
+  document.getElementById('unitsPage').classList.add('hidden'); 
+  document.getElementById('loginPage').classList.remove('hidden'); 
+}
+function goBackUnits(){ 
+  document.getElementById('shiftsPage').classList.add('hidden'); 
+  if(!isManager) showUnitsPage(); 
+  else showShiftsPage(); 
+}
+function goBackShifts(){ 
+  document.getElementById('detailsPage').classList.add('hidden'); 
+  showShiftsPage(); 
+}
 </script>
 
 </body>

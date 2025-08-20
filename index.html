@@ -25,7 +25,7 @@ body::before {
   position: fixed;
   top:0; left:0;
   width:100%; height:100%;
-  background: url('Gz.PNG') center/80% no-repeat;
+  background: url('Gz.PNG') center/60% no-repeat;
   opacity:0.1;
   filter: blur(5px);
   z-index:0;
@@ -148,33 +148,33 @@ button, input {
 // داده‌ها
 const units = [
   { name:'واحد معدن', type:'general', shifts:[
-    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:'8%', بلین:1200}},
-    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:'9%', بلین:1150}},
-    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:'7%', بلین:1180}},
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
     {name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{}}
   ]},
   { name:'واحد فرآوری و خردایش', type:'general', shifts:[
-    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.01, رطوبت:'10%', بلین:1250}},
-    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.011, رطوبت:'9%', بلین:1230}},
-    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.009, رطوبت:'8%', بلین:1220}},
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.01, رطوبت:10, بلین:1250}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.011, رطوبت:9, بلین:1230}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.009, رطوبت:8, بلین:1220}},
     {name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{}}
   ]},
   { name:'واحد گندله‌سازی', type:'general', shifts:[
-    {name:'A', time:'07:00 - 15:00', supervisor:'آقای سعید', data:{FEO:0.008, رطوبت:'8%', بلین:1200}},
-    {name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{FEO:0.009, رطوبت:'9%', بلین:1150}},
-    {name:'C', time:'23:00 - 07:00', supervisor:'آقای امامی', data:{FEO:0.007, رطوبت:'7%', بلین:1180}},
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای سعید', data:{FEO:0.008, رطوبت:8, بلین:1200}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای امامی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
     {name:'D', time:'استراحت', supervisor:'آقای روح‌الامینی', data:{}}
   ]},
   { name:'واحد انرژی و سیالات', type:'energy', shifts:[
-    {name:'A', time:'07:00 - 15:00', supervisor:'حسن', data:{برق:'80%', آب:'60%', گاز:'50%'}},
-    {name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{برق:'85%', آب:'62%', گاز:'52%'}},
-    {name:'C', time:'23:00 - 07:00', supervisor:'آقای خواجویی', data:{برق:'78%', آب:'58%', گاز:'49%'}},
+    {name:'A', time:'07:00 - 15:00', supervisor:'حسن', data:{برق:80, آب:60, گاز:50}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{برق:85, آب:62, گاز:52}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای خواجویی', data:{برق:78, آب:58, گاز:49}},
     {name:'D', time:'استراحت', supervisor:'آقای مجیدی', data:{}}
   ]},
   { name:'واحد آزمایشگاه', type:'general', shifts:[
-    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:'8%', بلین:1200}},
-    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:'9%', بلین:1150}},
-    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:'7%', بلین:1180}},
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
     {name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{}}
   ]}
 ];
@@ -251,10 +251,10 @@ function showDetailsPage(){
   }
 
   if(unit.type==='general'){
-    content.innerHTML+=`<div>FEO: ${shift.data.FEO}<br>رطوبت: ${shift.data.رطوبت}<br>بلین: ${shift.data.بلین}</div>`;
+    content.innerHTML+=`<div>FEO: ${shift.data.FEO}<br>رطوبت: ${shift.data.رطوبت}%<br>بلین: ${shift.data.بلین}</div>`;
     content.innerHTML+=`<canvas id="chartFEO"></canvas>`;
   } else if(unit.type==='energy'){
-    content.innerHTML+=`<div>برق: ${shift.data.برق}<br>آب: ${shift.data.آب}<br>گاز: ${shift.data.گاز}</div>`;
+    content.innerHTML+=`<div>برق: ${shift.data.برق}%<br>آب: ${shift.data.آب}%<br>گاز: ${shift.data.گاز}%</div>`;
     content.innerHTML+=`<canvas id="chartEnergy"></canvas>`;
   }
 
@@ -266,7 +266,7 @@ function showDetailsPage(){
         type:'bar',
         data:{
           labels:['FEO','رطوبت','بلین'],
-          datasets:[{label:'مقدار', data:[shift.data.FEO, parseFloat(shift.data.رطوبت), shift.data.بلین], backgroundColor:['#2563eb','#facc15','#ef4444']}]
+          datasets:[{label:'مقدار', data:[shift.data.FEO, shift.data.رطوبت, shift.data.بلین], backgroundColor:['#2563eb','#facc15','#ef4444']}]
         },
         options:{responsive:true, scales:{y:{beginAtZero:true}}}
       });
@@ -275,7 +275,7 @@ function showDetailsPage(){
         type:'bar',
         data:{
           labels:['برق','آب','گاز'],
-          datasets:[{label:'مقدار', data:[parseFloat(shift.data.برق), parseFloat(shift.data.آب), parseFloat(shift.data.گاز)], backgroundColor:['#2563eb','#22c55e','#f59e0b']}]
+          datasets:[{label:'مقدار', data:[shift.data.برق, shift.data.آب, shift.data.گاز], backgroundColor:['#2563eb','#22c55e','#f59e0b']}]
         },
         options:{responsive:true, scales:{y:{beginAtZero:true}}}
       });

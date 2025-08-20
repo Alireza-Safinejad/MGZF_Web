@@ -21,46 +21,56 @@
       height: 50px;
     }
 
-    /* پس‌زمینه لاگین */
+    /* صفحه لاگین با بک‌گراند لوگو */
     #login-section {
       position: relative;
-      height: 100vh;
+      min-height: calc(100vh - 80px); /* زیر هدر */
       display: flex;
       align-items: center;
       justify-content: center;
-      background: url("Gz.PNG") no-repeat center center;
-      background-size: cover;
+      background: url("Gz.PNG") no-repeat center center / cover;
+      overflow: hidden;
     }
+    /* لایه نیمه‌مات و کمی هنری */
     #login-section::before {
       content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(13, 27, 42, 0.8); /* نیمه مات */
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(800px 400px at 120% -10%, rgba(11, 21, 48, .7), transparent 60%),
+        radial-gradient(700px 500px at -10% 110%, rgba(19, 34, 63, .6), transparent 60%),
+        linear-gradient(180deg, rgba(13,27,42,.85), rgba(13,27,42,.85));
     }
+
+    /* باکس لاگین */
     #login-box {
       position: relative;
       background-color: #ffffff;
       color: #000000;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      width: 90%;
-      max-width: 350px;
+      padding: 28px 24px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      width: 92%;
+      max-width: 380px;
       text-align: center;
     }
+    #login-box h3 { margin: 0 0 10px 0; }
+    #login-box p  { margin: 0 0 18px 0; color: #334155; font-size: 14px; }
     #login-box input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-    #login-box button {
       width: 100%;
+      padding: 11px 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      outline: none;
+    }
+    #login-box input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .2);
+    }
+    #login-box .btn {
+      width: 100%;
+      margin-top: 12px;
     }
 
     .container {
@@ -72,7 +82,7 @@
       padding: 15px;
       margin: 10px auto;
       width: 90%;
-      max-width: 400px;
+      max-width: 420px;
     }
     .card h3 {
       margin-top: 0;
@@ -83,33 +93,44 @@
       color: white;
       padding: 10px 20px;
       margin-top: 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       text-decoration: none;
       cursor: pointer;
+      border: none;
     }
     .btn:hover {
       background-color: #778da9;
     }
     textarea {
-      width: 90%;
+      width: 100%;
       padding: 10px;
       margin-top: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
       resize: none;
       font-size: 14px;
+      outline: none;
+      min-height: 90px;
     }
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .2);
+    }
+    /* کارت‌های سفید برای خوانایی گزارش و نظر مدیر */
     .white-card {
       background-color: #ffffff;
-      color: #000000;
+      color: #0b1324;
     }
+    .white-card h3 { color: #0b1324; }
+
+    /* دکمه بازگشت ـ فقط در صفحه شیفت */
     .back-btn {
-      display: block;
-      margin: 20px auto;
+      display: none;              /* پیش‌فرض مخفی */
+      margin: 16px auto 0 auto;
       background-color: #e63946;
       color: white;
       padding: 8px 16px;
-      border-radius: 5px;
+      border-radius: 6px;
       text-decoration: none;
       cursor: pointer;
       width: fit-content;
@@ -126,15 +147,18 @@
     <h2>پرتال گزارش شیفت</h2>
   </header>
 
+  <!-- لاگین -->
   <div id="login-section">
     <div id="login-box">
       <h3>ورود به سامانه</h3>
-      <input type="text" id="username" placeholder="نام کاربری"><br>
-      <input type="password" id="password" placeholder="رمز عبور"><br>
+      <p>لطفاً نام کاربری و رمز عبور را وارد کنید</p>
+      <input type="text" id="username" placeholder="نام کاربری (مثلاً 1 یا 1000)">
+      <input type="password" id="password" placeholder="رمز عبور (123)">
       <button class="btn" onclick="login()">ورود</button>
     </div>
   </div>
 
+  <!-- منوی شیفت‌ها -->
   <div class="container" id="main-menu" style="display:none;">
     <h3>انتخاب شیفت</h3>
     <button class="btn" onclick="openShift('A')">شیفت A</button>
@@ -142,8 +166,11 @@
     <button class="btn" onclick="openShift('C')">شیفت C</button>
   </div>
 
+  <!-- صفحه شیفت -->
   <div class="container" id="shift-page" style="display:none;">
-    <div class="card">
+    <a class="back-btn" id="back-btn" onclick="goBack()">⬅ بازگشت به صفحه قبل</a>
+
+    <div class="card" style="margin-top:12px;">
       <h3 id="shift-title"></h3>
       <p id="shift-time"></p>
       <p id="supervisor"></p>
@@ -152,51 +179,62 @@
 
     <div class="card white-card">
       <h3>شرح گزارش</h3>
-      <textarea id="report-box" rows="4"></textarea>
+      <textarea id="report-box" rows="5" placeholder="شرح گزارش شیفت را اینجا بنویسید..."></textarea>
     </div>
 
     <div class="card white-card">
       <h3>نظر مدیر واحد</h3>
-      <p id="manager-note"></p>
+      <textarea id="manager-note" rows="4" placeholder="نظر مدیر واحد..."></textarea>
     </div>
-
-    <a class="back-btn" onclick="goBack()">⬅ بازگشت به صفحه قبل</a>
   </div>
 
   <script>
-    let currentUserType = "";
+    let currentUserType = ""; // "manager" یا "user"
 
     function login() {
-      let username = document.getElementById("username").value;
-      let password = document.getElementById("password").value;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-      if(password !== "123") {
+      if (password !== "123") {
         alert("رمز عبور اشتباه است");
         return;
       }
 
-      let userNum = parseInt(username);
-
-      if(userNum >= 1 && userNum <= 5) {
+      const num = parseInt(username, 10);
+      if (num >= 1 && num <= 5) {
         currentUserType = "manager";
-        document.getElementById("login-section").style.display = "none";
-        document.getElementById("main-menu").style.display = "block";
-      } else if(userNum >= 1000 && userNum <= 1800) {
+      } else if (num >= 1000 && num <= 1800) {
         currentUserType = "user";
-        document.getElementById("login-section").style.display = "none";
-        document.getElementById("main-menu").style.display = "block";
       } else {
         alert("نام کاربری معتبر نیست");
+        return;
       }
+
+      // نمایش منو
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("main-menu").style.display = "block";
+      // مطمئن می‌شویم دکمه بازگشت در لاگین نمایش داده نشود
+      const back = document.getElementById("back-btn");
+      if (back) back.style.display = "none";
     }
 
     function openShift(shift) {
+      // نمایش صفحه شیفت و دکمه بازگشت
       document.getElementById("main-menu").style.display = "none";
       document.getElementById("shift-page").style.display = "block";
+      document.getElementById("back-btn").style.display = "inline-block";
 
+      // اطلاعات نمایشی
       document.getElementById("shift-title").innerText = "واحد گندله سازی - شیفت " + shift;
-      document.getElementById("shift-time").innerText = "ساعت: 07:00 - 15:00";
-      document.getElementById("supervisor").innerText = "سرپرست: سعید";
+
+      // ساعت‌ها نمونه
+      let timeText = "ساعت: 07:00 - 15:00";
+      let supervisor = "سعید";
+      if (shift === "B") { timeText = "ساعت: 15:00 - 23:00"; supervisor = "نورمندی"; }
+      if (shift === "C") { timeText = "ساعت: 23:00 - 07:00"; supervisor = "امامی"; }
+
+      document.getElementById("shift-time").innerText = timeText;
+      document.getElementById("supervisor").innerText = "سرپرست: " + supervisor;
 
       document.getElementById("shift-data").innerHTML = `
         <p>Humidity: 8.2%</p>
@@ -206,20 +244,32 @@
         <p>Reject: 2.1%</p>
       `;
 
-      if(currentUserType === "manager") {
-        document.getElementById("report-box").value = "";
-        document.getElementById("report-box").disabled = true;
-        document.getElementById("manager-note").innerText = "اینجا نظر مدیر وارد می‌شود";
+      const reportBox  = document.getElementById("report-box");
+      const managerBox = document.getElementById("manager-note");
+
+      if (currentUserType === "manager") {
+        // مدیر: گزارش قفل، نظر مدیر فعال
+        reportBox.value   = "گزارش در حال بروز رسانی است";
+        reportBox.disabled = true;
+
+        managerBox.value    = "";
+        managerBox.disabled = false;
       } else {
-        document.getElementById("report-box").value = "";
-        document.getElementById("report-box").disabled = false;
-        document.getElementById("manager-note").innerText = "در حال بروز رسانی";
+        // کاربر عادی: گزارش فعال، نظر مدیر قفل
+        reportBox.value    = "";
+        reportBox.disabled = false;
+
+        managerBox.value    = "در حال بروز رسانی";
+        managerBox.disabled = true;
       }
     }
 
     function goBack() {
+      // برگشت به منوی شیفت‌ها
       document.getElementById("shift-page").style.display = "none";
       document.getElementById("main-menu").style.display = "block";
+      // دکمه بازگشت را مخفی می‌کنیم تا در لاگین دیده نشود
+      document.getElementById("back-btn").style.display = "none";
     }
   </script>
 

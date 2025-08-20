@@ -88,8 +88,6 @@
 
   <!-- Login -->
   <div id="screen-login" class="card" style="display:none">
-    <!-- دکمه برگشت -->
-    <div class="back" onclick="showScreen('splash')">← بازگشت</div>
     <div class="logo"><img src="Gz.PNG" alt="لوگو شرکت"></div>
     <h1>ورود به سامانه شیفت شرکت گهرزمین</h1>
     <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
@@ -105,7 +103,7 @@
 
   <!-- Units -->
   <div id="screen-units" class="card" style="display:none">
-    <div class="back" onclick="showScreen('login')">← بازگشت به ورود</div>
+    <div class="back" id="back-to-login">← خروج</div>
     <h1>انتخاب واحد</h1>
     <div class="grid">
       <button class="btn" data-unit="mine">واحد معدن</button>
@@ -119,7 +117,7 @@
 
   <!-- Shifts -->
   <div id="screen-shifts" class="card" style="display:none">
-    <div class="back" onclick="showScreen('units')">← بازگشت به واحدها</div>
+    <div class="back" id="back-to-units">← بازگشت به واحدها</div>
     <h1 id="unit-title">شیفت‌ها</h1>
     <div class="grid" id="shifts-grid"></div>
     <div class="footer">انتخاب شیفت برای مشاهده KPI و گزارش</div>
@@ -127,7 +125,7 @@
 
   <!-- KPI / Reports -->
   <div id="screen-details" class="card" style="display:none">
-    <div class="back" onclick="showScreen('shifts')">← بازگشت به شیفت‌ها</div>
+    <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
     <h1 id="shift-title">جزئیات شیفت</h1>
     <p id="shift-hours"></p>
     <p id="shift-supervisor"></p>
@@ -172,6 +170,10 @@
       alertBox.style.display='none';
       showScreen('units');
     });
+
+    document.getElementById('back-to-login').addEventListener('click', ()=> showScreen('login'));
+    document.getElementById('back-to-units').addEventListener('click', ()=> showScreen('units'));
+    document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
 
     const unitsData = {
       mine: {name:"واحد معدن", shifts:[

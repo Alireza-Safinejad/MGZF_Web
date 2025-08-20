@@ -14,213 +14,252 @@
       --accent:#2563eb;
       --ok:#16a34a;
       --danger:#dc2626;
-      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
       --radius:14px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      background: radial-gradient(1200px 600px at 120% -10%, #0b1530 0%, transparent 60%),
-                  radial-gradient(1000px 800px at -10% 110%, #13223f 0%, transparent 60%),
-                  linear-gradient(180deg,#0a0f1f 0%, #0f172a 100%);
-      color:var(--text);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Vazirmatn", Arial, sans-serif;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      margin:0; background:
+        radial-gradient(1200px 600px at 120% -10%, #0b1530 0%, transparent 60%),
+        radial-gradient(1000px 800px at -10% 110%, #13223f 0%, transparent 60%),
+        linear-gradient(180deg,#0a0f1f 0%, #0f172a 100%);
+      color:var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Vazirmatn", Arial, sans-serif;
+      display:flex; align-items:center; justify-content:center;
     }
     .card{
-      width:min(520px,92vw);
-      background:rgba(17,24,39,.65);
-      backdrop-filter: blur(8px);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:24px;
+      width:min(520px, 92vw); background:rgba(17,24,39,.65); backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px;
     }
     .center{display:flex; align-items:center; justify-content:center}
     .logo{
-      width:120px; height:120px; border-radius:50%; background:var(--brand);
-      display:grid; place-items:center; box-shadow:0 12px 40px rgba(0,48,135,.45), inset 0 0 0 6px rgba(255,255,255,.08);
+      width:120px;height:120px;border-radius:50%; display:grid; place-items:center;
+      box-shadow:0 12px 40px rgba(0,48,135,.45), inset 0 0 0 6px rgba(255,255,255,.08);
       margin:24px auto 16px;
     }
-    .logo img{width:80px; height:80px; border-radius:50%;}
+    .logo img{width:100%; height:100%; border-radius:50%;}
     h1{margin:.25rem 0 1rem 0; font-size:1.4rem; text-align:center}
     p.muted{color:var(--muted); text-align:center; margin:.25rem 0 1.25rem 0}
     label{display:block; font-size:.95rem; margin:.5rem 0 .35rem 0; color:#cbd5e1}
-    input{width:100%; padding:12px 14px; background:#0b1324; color:var(--text);
-      border:1px solid rgba(255,255,255,.08); border-radius:10px; outline:none;}
+    input{
+      width:100%; padding:12px 14px; background:#0b1324; color:var(--text);
+      border:1px solid rgba(255,255,255,.08); border-radius:10px; outline:none;
+    }
     input:focus{border-color:#334155; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
     .row{display:flex; gap:12px}
     .row>*{flex:1}
-    .btn{width:100%; margin-top:14px; padding:12px 16px; border-radius:10px; border:none;
-      color:white; background:linear-gradient(90deg,#2563eb,#1d4ed8);
-      cursor:pointer; font-size:1rem; font-weight:700; letter-spacing:.3px;
-      box-shadow:0 8px 26px rgba(37,99,235,.35);}
+    .btn{
+      width:100%; margin-top:14px; padding:12px 16px; border-radius:10px; border:none; color:white; background:linear-gradient(90deg,#2563eb,#1d4ed8);
+      cursor:pointer; font-size:1rem; font-weight:700; letter-spacing:.3px; box-shadow:0 8px 26px rgba(37,99,235,.35);
+    }
     .btn:active{transform: translateY(1px)}
     .alert{margin:.5rem 0; padding:.6rem .8rem; border-radius:10px; font-size:.95rem; background:#1f2937}
     .alert.ok{border:1px solid rgba(22,163,74,.45); color:#bbf7d0; background:rgba(22,163,74,.12)}
     .alert.err{border:1px solid rgba(220,38,38,.45); color:#fecaca; background:rgba(220,38,38,.12)}
     .grid{display:grid; gap:12px}
+    .grid.units{grid-template-columns: repeat(2, minmax(0,1fr))}
     .grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr))}
-    .tile{background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.05);
-      padding:14px; border-radius:12px;}
+    .tile{
+      background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.05);
+      padding:14px; border-radius:12px;
+    }
     .tile h3{margin:.2rem 0 .4rem 0; font-size:1rem}
     .tile .v{color:#e2e8f0; font-weight:700}
-    .ghost{padding:10px 14px; border-radius:10px; border:1px dashed rgba(148,163,184,.35);
-      color:#cbd5e1; text-align:center; margin-top:8px;}
+    .ghost{
+      padding:10px 14px; border-radius:10px; border:1px dashed rgba(148,163,184,.35);
+      color:#cbd5e1; text-align:center; margin-top:8px;
+    }
     .footer{margin-top:12px; color:#94a3b8; font-size:.85rem; text-align:center}
     .back{display:inline-flex; gap:8px; align-items:center; color:#93c5fd; cursor:pointer; margin-bottom:12px}
     #splash{position:fixed; inset:0; display:grid; place-items:center; background: radial-gradient(900px 500px at 120% -20%, #0b1530 0%, transparent 60%), #0a0f1f; z-index:10}
     #splash.fade{animation: fadeout .5s ease forwards}
     @keyframes fadeout{to{opacity:0; visibility:hidden}}
+    textarea{width:100%; padding:10px; border-radius:8px; margin-top:4px; background:#0b1324; color:var(--text); border:1px solid rgba(255,255,255,.1); resize:none;}
   </style>
 </head>
 <body>
-  <!-- Splash -->
-  <div id="splash">
-    <div class="center" style="flex-direction:column">
-      <div class="logo"><img src="Gz.PNG" alt="Gohar Zamin"></div>
-      <p class="muted">در حال آماده‌سازی…</p>
-    </div>
-  </div>
 
-  <!-- Login -->
-  <div id="screen-login" class="card" style="display:none">
+<!-- Splash -->
+<div id="splash">
+  <div class="center" style="flex-direction:column">
     <div class="logo"><img src="Gz.PNG" alt="Gohar Zamin"></div>
-    <h1>ورود به سامانه شیفت شرکت گهرزمین</h1>
-    <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
-    <div id="login-alert" class="alert err" style="display:none"></div>
-    <label>نام کاربری</label>
-    <input id="username" placeholder="مثلاً: admin" autocomplete="username">
-    <label>رمز عبور</label>
-    <input id="password" type="password" placeholder="مثلاً: 123" autocomplete="current-password">
-    <button id="btn-login" class="btn">ورود</button>
-    <div class="ghost" id="devline">Device: Web • ID (mock): <span id="dev-id">—</span></div>
-    <div class="footer">© Gohar Zamin • Demo</div>
+    <p class="muted">در حال آماده‌سازی…</p>
   </div>
+</div>
 
-  <!-- Units Selection -->
-  <div id="screen-units" class="card" style="display:none">
-    <h1>واحدهای شرکت گهرزمین</h1>
-    <div class="grid">
-      <button class="btn unit-btn" data-unit="Gondole">واحد گندله‌سازی</button>
-      <button class="btn unit-btn" data-unit="Energy">واحد انرژی و سیالات</button>
-      <button class="btn unit-btn" data-unit="Process">واحد فرآوری و خردایش</button>
-      <button class="btn unit-btn" data-unit="Mine">واحد معدن</button>
-      <button class="btn unit-btn" data-unit="Lab">واحد آزمایشگاه</button>
-    </div>
+<!-- Login -->
+<div id="screen-login" class="card" style="display:none">
+  <div class="logo"><img src="Gz.PNG" alt="Gohar Zamin"></div>
+  <h1>ورود به سامانه شیفت شرکت گهرزمین</h1>
+  <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
+  <div id="login-alert" class="alert err" style="display:none"></div>
+  <label>نام کاربری</label>
+  <input id="username" placeholder="مثلاً: admin" autocomplete="username">
+  <label>رمز عبور</label>
+  <input id="password" type="password" placeholder="مثلاً: 123" autocomplete="current-password">
+  <button id="btn-login" class="btn">ورود</button>
+  <div class="ghost" id="devline">Device: Web • ID (mock): <span id="dev-id">—</span></div>
+  <div class="footer">© Gohar Zamin • Demo</div>
+</div>
+
+<!-- Units Selection -->
+<div id="screen-units" class="card" style="display:none">
+  <h1>واحدهای شرکت گهرزمین</h1>
+  <div class="grid units">
+    <button class="btn" data-unit="mine">واحد معدن</button>
+    <button class="btn" data-unit="processing">واحد فرآوری و خردایش</button>
+    <button class="btn" data-unit="pellet">واحد گندله سازی</button>
+    <button class="btn" data-unit="energy">واحد انرژی و سیالات</button>
+    <button class="btn" data-unit="lab">واحد آزمایشگاه</button>
   </div>
+  <div class="footer">انتخاب واحد برای مشاهده شیفت‌ها</div>
+</div>
 
-  <!-- Shifts Screen -->
-  <div id="screen-shifts" class="card" style="display:none">
-    <div class="back" id="back-to-units">← بازگشت به واحدها</div>
-    <h1 id="unit-title">شیفت‌های واحد</h1>
-    <div class="grid">
-      <button class="btn shift-btn" data-shift="A">شیفت A</button>
-      <button class="btn shift-btn" data-shift="B">شیفت B</button>
-      <button class="btn shift-btn" data-shift="C">شیفت C</button>
-      <button class="btn shift-btn" data-shift="D">شیفت D</button>
-    </div>
-    <div class="footer">انتخاب شیفت برای مشاهده KPI و گزارش</div>
-  </div>
+<!-- Shifts -->
+<div id="screen-shifts" class="card" style="display:none">
+  <div class="back" id="back-to-units">← بازگشت به واحدها</div>
+  <h1 id="unit-title">شیفت‌های واحد</h1>
+  <div class="grid" id="shift-buttons"></div>
+  <div class="footer">انتخاب شیفت برای مشاهده KPI و گزارش</div>
+</div>
 
-  <!-- KPI & Report Screen -->
-  <div id="screen-details" class="card" style="display:none">
-    <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
-    <h1 id="shift-title">جزئیات شیفت</h1>
-    <div class="grid kpi" id="kpi-grid"></div>
-    <h3>گزارش شیفت</h3>
-    <p id="shift-report">گزارش به روز رسانی خواهد شد.</p>
-    <label>نظر مدیر واحد</label>
-    <input id="manager-comment" placeholder="نظر خود را وارد کنید...">
-  </div>
+<!-- Shift Details -->
+<div id="screen-details" class="card" style="display:none">
+  <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
+  <h1 id="shift-title">جزئیات شیفت</h1>
+  <div id="shift-time" style="margin-bottom:8px; font-size:.95rem; color:var(--muted)"></div>
+  <div id="shift-supervisor" style="margin-bottom:12px; font-size:.95rem; color:var(--muted)"></div>
+  <div class="grid kpi" id="kpi-grid"></div>
+  <h3>گزارش شیفت</h3>
+  <div id="shift-report">گزارش به‌روز رسانی خواهد شد.</div>
+  <h3>نظر مدیر واحد</h3>
+  <textarea placeholder="نظر خود را وارد کنید..."></textarea>
+</div>
 
-  <script>
-    const devId = localStorage.getItem('mgzf_dev_id') || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
-    localStorage.setItem('mgzf_dev_id', devId);
-    document.getElementById('dev-id').textContent = devId.slice(0,8);
+<script>
+const devId = localStorage.getItem('mgzf_dev_id') || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
+localStorage.setItem('mgzf_dev_id', devId);
+document.getElementById('dev-id').textContent = devId.slice(0, 8);
 
-    // Splash
-    setTimeout(()=>{ document.getElementById('splash').classList.add('fade'); setTimeout(()=>showScreen('login'),350); },2000);
+setTimeout(() => {
+  document.getElementById('splash').classList.add('fade');
+  setTimeout(()=> showScreen('login'), 350);
+}, 2000);
 
-    // --- Screens Controller
-    function showScreen(name){
-      document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
-      document.getElementById('screen-units').style.display = (name==='units')?'block':'none';
-      document.getElementById('screen-shifts').style.display = (name==='shifts')?'block':'none';
-      document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
-    }
+function showScreen(name){
+  document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
+  document.getElementById('screen-units').style.display = (name==='units')?'block':'none';
+  document.getElementById('screen-shifts').style.display = (name==='shifts')?'block':'none';
+  document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
+}
 
-    // Login
-    document.getElementById('btn-login').addEventListener('click', ()=>{
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value.trim();
-      const alertBox = document.getElementById('login-alert');
-      if(u==='admin' && p==='123'){
-        alertBox.style.display='none';
-        showScreen('units');
-      } else {
-        alertBox.textContent='نام کاربری یا رمز اشتباه است';
-        alertBox.style.display='block';
-      }
+// Login
+document.getElementById('btn-login').addEventListener('click', ()=>{
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value.trim();
+  const alertBox = document.getElementById('login-alert');
+  if (u==='admin' && p==='123'){
+    alertBox.style.display='none';
+    showScreen('units');
+  } else {
+    alertBox.textContent = 'نام کاربری یا رمز اشتباه است';
+    alertBox.style.display = 'block';
+  }
+});
+
+// Units -> Shifts
+const unitsData = {
+  mine: {
+    title:'واحد معدن',
+    shifts:[
+      {name:'A', time:'07:00 - 15:00', supervisor:'سعید', kpi:{FeO:'12.5%', رطوبت:'8.2%', بلین:'3500'}},
+      {name:'B', time:'15:00 - 23:00', supervisor:'نورمندی', kpi:{FeO:'13%', رطوبت:'7.8%', بلین:'3400'}},
+      {name:'C', time:'23:00 - 07:00', supervisor:'امامی', kpi:{FeO:'12%', رطوبت:'8%', بلین:'3600'}},
+      {name:'D', time:'استراحت', supervisor:'روح‌الامینی', kpi:{FeO:'-', رطوبت:'-', بلین:'-'}}
+    ]
+  },
+  processing: {
+    title:'واحد فرآوری و خردایش',
+    shifts:[
+      {name:'A', time:'07:00 - 15:00', supervisor:'کوچولو', kpi:{گاز:'50%', برق:'80%', آب:'50%'}},
+      {name:'B', time:'15:00 - 23:00', supervisor:'فرهاد', kpi:{گاز:'55%', برق:'75%', آب:'60%'}},
+      {name:'C', time:'23:00 - 07:00', supervisor:'طوسی', kpi:{گاز:'52%', برق:'78%', آب:'55%'}},
+      {name:'D', time:'استراحت', supervisor:'ملکشاهی', kpi:{گاز:'-', برق:'-', آب:'-'}}
+    ]
+  },
+  pellet: {
+    title:'واحد گندله سازی',
+    shifts:[
+      {name:'A', time:'07:00 - 15:00', supervisor:'سعید', kpi:{FeO:'12.5%', رطوبت:'8.2%', بلین:'3500', تولید:'500 تن', ریجکت:'2.1%'}},
+      {name:'B', time:'15:00 - 23:00', supervisor:'نورمندی', kpi:{FeO:'13%', رطوبت:'7.8%', بلین:'3400', تولید:'480 تن', ریجکت:'2.5%'}},
+      {name:'C', time:'23:00 - 07:00', supervisor:'امامی', kpi:{FeO:'12%', رطوبت:'8%', بلین:'3600', تولید:'510 تن', ریجکت:'2%'}},
+      {name:'D', time:'استراحت', supervisor:'روح‌الامینی', kpi:{FeO:'-', رطوبت:'-', بلین:'-', تولید:'-', ریجکت:'-'}}
+    ]
+  },
+  energy: {
+    title:'واحد انرژی و سیالات',
+    shifts:[
+      {name:'A', time:'07:00 - 15:00', supervisor:'حسن', kpi:{گاز:'50%', برق:'80%', آب:'50%'}},
+      {name:'B', time:'15:00 - 23:00', supervisor:'حاج رضا', kpi:{گاز:'55%', برق:'75%', آب:'60%'}},
+      {name:'C', time:'23:00 - 07:00', supervisor:'کریمی', kpi:{گاز:'52%', برق:'78%', آب:'55%'}},
+      {name:'D', time:'استراحت', supervisor:'مجیدی', kpi:{گاز:'-', برق:'-', آب:'-'}}
+    ]
+  },
+  lab: {
+    title:'واحد آزمایشگاه',
+    shifts:[
+      {name:'A', time:'07:00 - 15:00', supervisor:'---', kpi:{نمونه:'-', تست:'-'}},
+      {name:'B', time:'15:00 - 23:00', supervisor:'---', kpi:{نمونه:'-', تست:'-'}},
+      {name:'C', time:'23:00 - 07:00', supervisor:'---', kpi:{نمونه:'-', تست:'-'}},
+      {name:'D', time:'استراحت', supervisor:'---', kpi:{نمونه:'-', تست:'-'}}
+    ]
+  }
+};
+
+let currentUnit = null;
+
+document.querySelectorAll('#screen-units .btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    currentUnit = btn.dataset.unit;
+    const unit = unitsData[currentUnit];
+    document.getElementById('unit-title').textContent = unit.title;
+    const shiftContainer = document.getElementById('shift-buttons');
+    shiftContainer.innerHTML = '';
+    unit.shifts.forEach(s=>{
+      const b = document.createElement('button');
+      b.className='btn';
+      b.textContent='شیفت '+s.name;
+      b.dataset.shift=s.name;
+      shiftContainer.appendChild(b);
     });
+    showScreen('shifts');
+    attachShiftListeners();
+  });
+});
 
-    // Units click
-    document.querySelectorAll('.unit-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const unit = btn.dataset.unit;
-        document.getElementById('unit-title').textContent = 'شیفت‌های واحد ' + btn.textContent;
-        currentUnit = unit;
-        showScreen('shifts');
+document.getElementById('back-to-units').addEventListener('click', ()=>showScreen('units'));
+document.getElementById('back-to-shifts').addEventListener('click', ()=>showScreen('shifts'));
+
+function attachShiftListeners(){
+  document.querySelectorAll('#shift-buttons .btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const shiftName = btn.dataset.shift;
+      const shift = unitsData[currentUnit].shifts.find(s=>s.name===shiftName);
+      document.getElementById('shift-title').textContent = 'جزئیات شیفت '+shift.name;
+      document.getElementById('shift-time').textContent = 'ساعت شیفت: '+shift.time;
+      document.getElementById('shift-supervisor').textContent = 'سرپرست شیفت: '+shift.supervisor;
+      const kpiGrid = document.getElementById('kpi-grid');
+      kpiGrid.innerHTML='';
+      Object.entries(shift.kpi).forEach(([k,v])=>{
+        const el = document.createElement('div');
+        el.className='tile';
+        el.innerHTML=`<h3>${k}</h3><div class="v">${v}</div>`;
+        kpiGrid.appendChild(el);
       });
+      showScreen('details');
     });
-
-    document.getElementById('back-to-units').addEventListener('click',()=>showScreen('units'));
-    document.getElementById('back-to-shifts').addEventListener('click',()=>showScreen('shifts'));
-
-    let currentUnit = '';
-    const unitData = {
-      "Gondole": {
-        A:{name:"سعید", time:"07:00-15:00", kpi:{'درصد رطوبت':'8.2%','درصد FeO':'12.5%','میزان بلین':'3500','میزان تولید در ساعت':'500 تن','میزان ریجکتی':'2.1%'}},
-        B:{name:"نورمندی", time:"15:00-23:00", kpi:{'درصد رطوبت':'8.5%','درصد FeO':'12.2%','میزان بلین':'3600','میزان تولید در ساعت':'520 تن','میزان ریجکتی':'2.0%'}},
-        C:{name:"امامی", time:"23:00-07:00", kpi:{'درصد رطوبت':'7.8%','درصد FeO':'12.8%','میزان بلین':'3400','میزان تولید در ساعت':'480 تن','میزان ریجکتی':'2.5%'}},
-        D:{name:"روح الامینی", time:"استراحت", kpi:{}}
-      },
-      "Energy": {
-        A:{name:"حسن", time:"07:00-15:00", kpi:{'میزان گاز مصرفی':'50%','برق مصرفی':'80%','آب مصرفی':'50%'}},
-        B:{name:"حاج رضا", time:"15:00-23:00", kpi:{'میزان گاز مصرفی':'52%','برق مصرفی':'78%','آب مصرفی':'51%'}},
-        C:{name:"کریمی", time:"23:00-07:00", kpi:{'میزان گاز مصرفی':'48%','برق مصرفی':'79%','آب مصرفی':'50%'}},
-        D:{name:"مجیدی", time:"استراحت", kpi:{}}
-      },
-      "Process": {
-        A:{name:"کوچولو", time:"07:00-15:00", kpi:{'درصد رطوبت':'10%','درصد FeO':'11%','میزان بلین':'4000'}},
-        B:{name:"فرهاد", time:"15:00-23:00", kpi:{'درصد رطوبت':'9%','درصد FeO':'10%','میزان بلین':'3900'}},
-        C:{name:"طوسی", time:"23:00-07:00", kpi:{'درصد رطوبت':'8%','درصد FeO':'12%','میزان بلین':'3700'}},
-        D:{name:"ملکشاهی", time:"استراحت", kpi:{}}
-      },
-      "Mine": {}, "Lab": {}
-    };
-
-    document.querySelectorAll('.shift-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const shift = btn.dataset.shift;
-        const data = unitData[currentUnit][shift];
-        document.getElementById('shift-title').textContent = 'شیفت ' + shift + ' (' + data.time + ') – سرپرست: ' + data.name;
-        const grid = document.getElementById('kpi-grid');
-        grid.innerHTML = '';
-        Object.entries(data.kpi).forEach(([k,v])=>{
-          const el = document.createElement('div');
-          el.className='tile';
-          el.innerHTML=`<h3>${k}</h3><div class="v">${v}</div>`;
-          grid.appendChild(el);
-        });
-        document.getElementById('shift-report').textContent = 'گزارش به روز رسانی خواهد شد.';
-        document.getElementById('manager-comment').value = '';
-        showScreen('details');
-      });
-    });
-  </script>
+  });
+}
+</script>
 </body>
 </html>

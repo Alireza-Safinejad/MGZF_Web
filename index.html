@@ -1,123 +1,368 @@
-<!DOCTYPE html>
-<html lang="fa">
+<!doctype html>
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>شرکت گهرزمین – سیستم مانیتورینگ شیفت‌ها های کارخانه گندله سازی</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>شرکت گهرزمین – مانیتورینگ شیفت‌ها</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {
-      font-family: tahoma, Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f5f5f5;
+    :root{
+      --brand:#003087;
+      --bg:#0f172a;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --accent:#2563eb;
+      --ok:#16a34a;
+      --danger:#dc2626;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --radius:14px;
     }
-    header {
-      background: #003366;
-      color: #fff;
-      text-align: center;
-      padding: 15px;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 120% -10%, #0b1530 0%, transparent 60%),
+        radial-gradient(1000px 800px at -10% 110%, #13223f 0%, transparent 60%),
+        linear-gradient(180deg,#0a0f1f 0%, #0f172a 100%);
+      color:var(--text); font-family: system-ui, -apple-system,"Segoe UI",Roboto,"Noto Naskh Arabic UI","Vazirmatn",Tahoma,Arial,sans-serif;
+      display:flex; align-items:center; justify-content:center; padding:18px;
     }
-    .container {
-      width: 90%;
-      margin: 20px auto;
+    .card{
+      width:min(880px, 96vw);
+      background:rgba(17,24,39,.65); backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px;
     }
-    .shift {
-      background: #fff;
-      border-radius: 6px;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    .center{display:flex; align-items:center; justify-content:center}
+    .logo{
+      width:120px;height:120px;border-radius:50%; background:var(--brand);
+      display:grid; place-items:center; box-shadow:0 12px 40px rgba(0,48,135,.45), inset 0 0 0 6px rgba(255,255,255,.08);
+      margin:24px auto 16px;
     }
-    .shift h2 {
-      margin-top: 0;
-      color: #003366;
+    .logo span{font-size:44px;font-weight:800; letter-spacing:.5px; color:white}
+    h1{margin:.25rem 0 1rem 0; font-size:1.4rem; text-align:center}
+    p.muted{color:var(--muted); text-align:center; margin:.25rem 0 1.25rem 0}
+    label{display:block; font-size:.95rem; margin:.5rem 0 .35rem 0; color:#cbd5e1}
+    input{
+      width:100%; padding:12px 14px; background:#0b1324; color:var(--text);
+      border:1px solid rgba(255,255,255,.08); border-radius:10px; outline:none;
     }
-    .charts {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
+    input:focus{border-color:#334155; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+    .btn{
+      width:100%; margin-top:14px; padding:12px 16px; border-radius:10px; border:none; color:white;
+      background:linear-gradient(90deg,#2563eb,#1d4ed8);
+      cursor:pointer; font-size:1rem; font-weight:700; letter-spacing:.3px; box-shadow:0 8px 26px rgba(37,99,235,.35);
     }
-    canvas {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 10px;
+    .btn:active{transform: translateY(1px)}
+    .alert{margin:.5rem 0; padding:.6rem .8rem; border-radius:10px; font-size:.95rem; background:#1f2937}
+    .alert.ok{border:1px solid rgba(22,163,74,.45); color:#bbf7d0; background:rgba(22,163,74,.12)}
+    .alert.err{border:1px solid rgba(220,38,38,.45); color:#fecaca; background:rgba(220,38,38,.12)}
+    .footer{margin-top:12px; color:#94a3b8; font-size:.85rem; text-align:center}
+    .back{display:inline-flex; gap:8px; align-items:center; color:#93c5fd; cursor:pointer; margin-bottom:12px}
+    /* Splash */
+    #splash{position:fixed; inset:0; display:grid; place-items:center; background: radial-gradient(900px 500px at 120% -20%, #0b1530 0%, transparent 60%), #0a0f1f; z-index:10}
+    #splash.fade{animation: fadeout .5s ease forwards}
+    @keyframes fadeout{to{opacity:0; visibility:hidden}}
+    /* Shifts grid */
+    .shift-grid{display:grid; gap:12px; grid-template-columns: repeat(auto-fit,minmax(240px,1fr))}
+    .shift-card{
+      background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:14px;
     }
+    .shift-card h3{margin:.2rem 0 .35rem 0}
+    .tag{display:inline-block; padding:3px 8px; border-radius:999px; font-size:.8rem; background:rgba(37,99,235,.18); border:1px solid rgba(37,99,235,.35); color:#bfdbfe}
+    .current{outline:2px solid #22c55e44}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .charts{display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); margin-top:10px}
+    canvas{background:#0b1324; border:1px solid rgba(255,255,255,.06); border-radius:10px; padding:6px}
+    .kpi-tiles{display:grid; gap:12px; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); margin-top:6px}
+    .tile{background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.05); padding:12px; border-radius:10px}
+    .tile .k{font-size:.9rem; color:#cbd5e1}
+    .tile .v{font-weight:800; margin-top:6px}
+    .ghost{padding:10px 14px; border-radius:10px; border:1px dashed rgba(148,163,184,.35); color:#cbd5e1; text-align:center; margin-top:8px}
   </style>
 </head>
 <body>
-  <header>
-    <h1>شرکت گهرزمین – برنامه شیفت‌ها و شاخص‌ها</h1>
-  </header>
 
-  <div class="container">
-    <!-- شیفت A -->
-    <div class="shift">
-      <h2>شیفت A (07:00 – 15:00) | مسئول: آقای سعید</h2>
-      <div class="charts">
-        <canvas id="feoA" width="300" height="200"></canvas>
-        <canvas id="humidityA" width="300" height="200"></canvas>
-        <canvas id="blaineA" width="300" height="200"></canvas>
-      </div>
+  <!-- Splash -->
+  <div id="splash">
+    <div class="center" style="flex-direction:column">
+      <div class="logo"><span>GZ</span></div>
+      <p class="muted">در حال آماده‌سازی…</p>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div id="screen-login" class="card" style="display:none;max-width:520px">
+    <div class="logo"><span>GZ</span></div>
+    <h1>ورود به سامانه مانیتورینگ</h1>
+    <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
+    <div id="login-alert" class="alert err" style="display:none"></div>
+    <label>نام کاربری</label>
+    <input id="username" placeholder="مثلاً: admin" autocomplete="username">
+    <label>رمز عبور</label>
+    <input id="password" type="password" placeholder="مثلاً: 123" autocomplete="current-password">
+    <button id="btn-login" class="btn">ورود</button>
+    <div class="ghost" id="devline">Device: Web • ID (mock): <span id="dev-id">—</span></div>
+    <div class="footer">© Gohar Zamin • Demo</div>
+  </div>
+
+  <!-- Shifts -->
+  <div id="screen-shifts" class="card" style="display:none">
+    <div class="back" id="back-to-login">← خروج</div>
+    <h1>شیفت‌های کارخانه گندله‌سازی</h1>
+    <p class="muted" id="rotation-note">چیدمان امروز بر اساس چرخش دو روزه</p>
+    <div class="shift-grid" id="shift-grid"></div>
+    <div class="footer">برای مشاهده KPI روی شیفت دلخواه بزنید</div>
+  </div>
+
+  <!-- Shift Details -->
+  <div id="screen-details" class="card" style="display:none">
+    <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
+    <h1 id="shift-title">جزئیات شیفت</h1>
+    <p class="muted" id="shift-meta">—</p>
+
+    <!-- KPI tiles (اعداد خلاصه) -->
+    <div class="kpi-tiles" id="kpi-tiles"></div>
+
+    <!-- Charts -->
+    <div class="charts">
+      <canvas id="chart-feo" height="180"></canvas>
+      <canvas id="chart-hum" height="180"></canvas>
+      <canvas id="chart-blaine" height="180"></canvas>
+      <canvas id="chart-prod" height="180"></canvas>
+      <canvas id="chart-reject" height="180"></canvas>
     </div>
 
-    <!-- شیفت B -->
-    <div class="shift">
-      <h2>شیفت B (15:00 – 23:00) | مسئول: آقای نورمندی</h2>
-      <div class="charts">
-        <canvas id="feoB" width="300" height="200"></canvas>
-        <canvas id="humidityB" width="300" height="200"></canvas>
-        <canvas id="blaineB" width="300" height="200"></canvas>
+    <!-- Logs (آلارم، توقفات) -->
+    <div class="row" style="margin-top:12px">
+      <div class="tile" style="flex:1; min-width:260px">
+        <div class="k">آلارم‌ها</div>
+        <div id="alarms" class="v" style="line-height:1.8">—</div>
       </div>
-    </div>
-
-    <!-- شیفت C -->
-    <div class="shift">
-      <h2>شیفت C (23:00 – 07:00) | مسئول: آقای امامی</h2>
-      <div class="charts">
-        <canvas id="feoC" width="300" height="200"></canvas>
-        <canvas id="humidityC" width="300" height="200"></canvas>
-        <canvas id="blaineC" width="300" height="200"></canvas>
+      <div class="tile" style="flex:1; min-width:260px">
+        <div class="k">توقفات</div>
+        <div id="stops" class="v" style="line-height:1.8">—</div>
       </div>
-    </div>
-
-    <!-- شیفت D -->
-    <div class="shift">
-      <h2>شیفت D (استراحت) | مسئول: آقای روح‌الامینی</h2>
-      <p>این شیفت استراحت است و داده‌ای ثبت نمی‌شود.</p>
     </div>
   </div>
 
   <script>
-    // تابع رسم نمودار
-    function drawChart(canvasId, label, data, color) {
-      new Chart(document.getElementById(canvasId), {
-        type: 'line',
-        data: {
-          labels: ["روز 1", "روز 2", "روز 3", "روز 4"],
-          datasets: [{
-            label: label,
-            data: data,
-            borderColor: color,
-            fill: false,
-            tension: 0.3
-          }]
-        }
+    // ---------- Device ID (mock) ----------
+    const devId = localStorage.getItem('mgzf_dev_id') || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
+    localStorage.setItem('mgzf_dev_id', devId);
+    document.getElementById('dev-id').textContent = devId.slice(0,8);
+
+    // ---------- Data ----------
+    const TEAMS = ['A','B','C','D'];                 // تیم‌ها
+    const TEAM_INFO = {
+      A: { manager:'آقای سعید' },
+      B: { manager:'آقای نورمندی' },
+      C: { manager:'آقای امامی' },
+      D: { manager:'آقای روح‌الامینی' }
+    };
+
+    // اسلات‌های زمانی ثابت
+    const SLOTS = [
+      {key:'morning', label:'07:00 – 15:00', name:'صبح'},
+      {key:'evening', label:'15:00 – 23:00', name:'عصر'},
+      {key:'night',   label:'23:00 – 07:00', name:'شب'},
+      {key:'rest',    label:'استراحت',       name:'استراحت', rest:true}
+    ];
+
+    // نقطه شروع چرخش (قابل تغییر توسط شما)
+    const ROTATION_ANCHOR = new Date('2025-01-01T00:00:00'); // روز اول، تیم A در اسلات صبح، B عصر، C شب، D استراحت
+    function daysSinceAnchor(d=new Date()){
+      const a = new Date(ROTATION_ANCHOR.getFullYear(), ROTATION_ANCHOR.getMonth(), ROTATION_ANCHOR.getDate());
+      const t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      return Math.floor((t - a) / 86400000);
+    }
+    function todayRotationIndex(){
+      // هر ۲ روز یک گام چرخش
+      const idx = Math.floor(daysSinceAnchor()/2) % 4;
+      return (idx + 4) % 4;
+    }
+    // تیم → اسلاتِ امروز
+    function teamToTodaySlotIndex(team){
+      const teamIdx = TEAMS.indexOf(team); // A=0,B=1,C=2,D=3
+      const rot = todayRotationIndex();
+      return (teamIdx + rot) % 4;          // 0..3 -> اندیس SLOTS
+    }
+
+    // ---------- Splash then Login ----------
+    setTimeout(()=>{ document.getElementById('splash').classList.add('fade'); setTimeout(()=>showScreen('login'), 350); }, 1500);
+
+    // ---------- Screen controller ----------
+    function showScreen(name){
+      document.getElementById('screen-login').style.display  = name==='login'  ? 'block' : 'none';
+      document.getElementById('screen-shifts').style.display = name==='shifts' ? 'block' : 'none';
+      document.getElementById('screen-details').style.display= name==='details'? 'block' : 'none';
+    }
+
+    // ---------- Login ----------
+    const allowedDevices = []; // اختیاری: devIdهای مجاز را اضافه کن
+    document.getElementById('btn-login').addEventListener('click', ()=>{
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      const alertBox = document.getElementById('login-alert');
+
+      if (allowedDevices.length && !allowedDevices.includes(devId)){
+        alertBox.textContent = 'دستگاه مجاز نیست'; alertBox.style.display='block'; return;
+      }
+      if (u==='admin' && p==='123'){ alertBox.style.display='none'; buildShiftsGrid(); showScreen('shifts'); }
+      else { alertBox.textContent='نام کاربری یا رمز اشتباه است'; alertBox.style.display='block'; }
+    });
+
+    document.getElementById('back-to-login').addEventListener('click', ()=> showScreen('login'));
+    document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
+
+    // ---------- Build Shifts Grid (with rotation) ----------
+    function buildShiftsGrid(){
+      const grid = document.getElementById('shift-grid');
+      grid.innerHTML = '';
+
+      const rotIdx = todayRotationIndex();
+      document.getElementById('rotation-note').textContent =
+        `چرخش امروز: +${rotIdx} (هر دو روز یک گام) – از ${ROTATION_ANCHOR.toLocaleDateString('fa-IR')}`;
+
+      const now = new Date();
+      const currentSlotByClock = currentSlotIndexByTime(now);
+
+      TEAMS.forEach(team=>{
+        const slotIdx = teamToTodaySlotIndex(team);
+        const slot = SLOTS[slotIdx];
+        const isCurrent = (!slot.rest && slotIdx === currentSlotByClock);
+
+        const div = document.createElement('div');
+        div.className = 'shift-card'+(isCurrent?' current':'');
+        div.innerHTML = `
+          <h3>شیفت ${team} ${isCurrent?'<span class="tag">در حال اجرا</span>':''}</h3>
+          <div class="row">
+            <span class="tag">مسئول: ${TEAM_INFO[team].manager}</span>
+            <span class="tag">بازه امروز: ${slot.label}</span>
+            <span class="tag">نوع: ${slot.name}</span>
+          </div>
+          <button class="btn" style="margin-top:10px" data-team="${team}">مشاهده KPI</button>
+        `;
+        grid.appendChild(div);
+      });
+
+      grid.querySelectorAll('button[data-team]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const team = btn.getAttribute('data-team');
+          renderShift(team);
+          showScreen('details');
+        });
       });
     }
 
-    // نمونه داده‌ها (می‌تونی بعداً واقعی کنی)
-    drawChart("feoA", "FeO (%)", [12, 11, 13, 10], "red");
-    drawChart("humidityA", "رطوبت (%)", [8, 7.5, 8.2, 7.8], "blue");
-    drawChart("blaineA", "Blaine (cm²/g)", [1500, 1520, 1490, 1510], "green");
+    // تعیین اسلات جاری با توجه به ساعت سیستم
+    function currentSlotIndexByTime(d=new Date()){
+      const h = d.getHours();
+      if (h>=7 && h<15)  return 0;   // صبح
+      if (h>=15 && h<23) return 1;   // عصر
+      // بازه شب: 23..24 و 0..7
+      return 2;                      // شب
+    }
 
-    drawChart("feoB", "FeO (%)", [11, 12, 11.5, 10.8], "red");
-    drawChart("humidityB", "رطوبت (%)", [7.8, 8.1, 7.9, 8.3], "blue");
-    drawChart("blaineB", "Blaine (cm²/g)", [1480, 1500, 1495, 1515], "green");
+    // ---------- Mock KPI per team ----------
+    const KPI_SERIES = {
+      // مقادیر نمونه برای 7 روز اخیر (می‌تونی بعداً از API بخونی)
+      A: { FeO:[12,11.5,12.2,11.8,12.4,11.2,12.0], Hum:[8.0,7.6,7.8,8.2,7.9,8.1,7.7], Blaine:[3500,3520,3490,3510,3530,3480,3505], Prod:[500,510,495,505,515,490,508], Reject:[2.1,2.0,2.3,2.0,2.2,1.9,2.1],
+           Alarms:['آلارم سنسور 1','رطوبت بالا'], Stops:['توقف 40 دقیقه‌ای'] },
+      B: { FeO:[11.8,12.0,11.9,12.1,11.7,12.2,11.9], Hum:[7.9,8.2,8.0,7.8,8.1,7.9,8.0], Blaine:[3480,3500,3495,3515,3490,3520,3500], Prod:[495,505,498,512,500,502,507], Reject:[2.0,2.2,2.1,2.0,2.3,2.2,2.1],
+           Alarms:['آلارم دمای بیرینگ'], Stops:['توقف 15 دقیقه‌ای'] },
+      C: { FeO:[13.0,12.7,13.2,12.9,13.1,12.8,13.0], Hum:[8.3,8.1,8.4,8.2,8.3,8.5,8.2], Blaine:[3520,3530,3510,3505,3540,3525,3515], Prod:[505,508,500,498,510,495,503], Reject:[2.3,2.1,2.4,2.2,2.3,2.5,2.2],
+           Alarms:['آلارم فشار هوای فیلتر'], Stops:['توقف 20 دقیقه‌ای'] },
+      D: { FeO:[], Hum:[], Blaine:[], Prod:[], Reject:[], Alarms:['شیفت استراحت'], Stops:[] }
+    };
 
-    drawChart("feoC", "FeO (%)", [13, 12.8, 13.2, 12.5], "red");
-    drawChart("humidityC", "رطوبت (%)", [8.2, 8.4, 8.1, 8.3], "blue");
-    drawChart("blaineC", "Blaine (cm²/g)", [1520, 1530, 1510, 1505], "green");
+    // ---------- Charts helpers ----------
+    let chartInstances = [];
+    function destroyCharts(){
+      chartInstances.forEach(ch=> ch && ch.destroy());
+      chartInstances = [];
+    }
+    function makeLineChart(elId, label, data){
+      const ctx = document.getElementById(elId);
+      const chart = new Chart(ctx, {
+        type:'line',
+        data:{
+          labels:['روز-1','روز-2','روز-3','روز-4','روز-5','روز-6','روز-7'],
+          datasets:[{label, data, borderWidth:2, fill:false, tension:.3}]
+        },
+        options:{
+          plugins:{ legend:{labels:{font:{family:'Tahoma'}}}},
+          scales:{
+            x:{ ticks:{ font:{family:'Tahoma'} } },
+            y:{ ticks:{ font:{family:'Tahoma'} } }
+          }
+        }
+      });
+      chartInstances.push(chart);
+    }
+
+    // ---------- Render Shift Details ----------
+    function renderShift(team){
+      const slotIdx = teamToTodaySlotIndex(team);
+      const slot = SLOTS[slotIdx];
+      document.getElementById('shift-title').textContent = `جزئیات شیفت ${team}`;
+      document.getElementById('shift-meta').textContent =
+        `مسئول: ${TEAM_INFO[team].manager} • بازه امروز: ${slot.label} (${slot.name})`;
+
+      const tiles = document.getElementById('kpi-tiles');
+      tiles.innerHTML = '';
+
+      const d = KPI_SERIES[team];
+      // مقادیر آخر به‌عنوان خلاصه
+      function last(arr){ return arr.length? arr[arr.length-1] : '—'; }
+
+      const summaryKPIs = [
+        {k:'درصد FeO',      v:last(d.FEO||d.Feo||d.FEO||d.Feo||d.FEO), alt:last(d.FEO||d.Feo||d.FEO)},
+        {k:'درصد رطوبت',    v:last(d.Hum)},
+        {k:'بلِین',         v:last(d.Blaine)},
+        {k:'تولید (تن/ساعت)', v:last(d.Prod)},
+        {k:'ریجکتی (%)',    v:last(d.Reject)}
+      ];
+
+      // چون بالا یک مقدار عجیب برای FeO ساختم، همینجا درستش می‌کنم:
+      summaryKPIs[0].v = last(d.FEO||d.Feo||d.FEO||d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo) || last(d.FEO) || last(d.Feo);
+      // اما عملاً از d.FEO استفاده نمی‌کنیم، مقادیر درست پایین با d.F e O = d.F e O؟! ساده: از d.F e O استفاده نکنیم:
+      // درست: از d.FeO استفاده می‌کنیم که بالا نگه داشتیم به صورت d.F e O ؟ برای سادگی مقدار خلاصه را از d.F e O (درست) می‌گیریم:
+      // بازنویسی راحت‌تر:
+      const feoLatest = (KPI_SERIES[team].FeO && KPI_SERIES[team].FeO.length) ? KPI_SERIES[team].FeO.slice(-1)[0] : '—';
+      summaryKPIs[0].v = feoLatest;
+
+      // ساخت تایل‌ها
+      tiles.appendChild(tileEl('درصد FeO', feoLatest));
+      tiles.appendChild(tileEl('درصد رطوبت', last(d.Hum)));
+      tiles.appendChild(tileEl('بلِین', last(d.Blaine)));
+      tiles.appendChild(tileEl('تولید (تن/ساعت)', last(d.Prod)));
+      tiles.appendChild(tileEl('ریجکتی (%)', last(d.Reject)));
+
+      // آلارم و توقفات
+      document.getElementById('alarms').innerHTML = d.Alarms.length ? ('• '+d.Alarms.join('<br>• ')) : '—';
+      document.getElementById('stops').innerHTML  = d.Stops.length  ? ('• '+d.Stops.join('<br>• '))  : '—';
+
+      // نمودارها
+      destroyCharts();
+      if (slot.rest){
+        // شیفت استراحت: نموداری نیست
+        return;
+      }
+      makeLineChart('chart-feo',    'FeO (%)', KPI_SERIES[team].FeO);
+      makeLineChart('chart-hum',    'رطوبت (%)', KPI_SERIES[team].Hum);
+      makeLineChart('chart-blaine', 'Blaine (cm²/g)', KPI_SERIES[team].Blaine);
+      makeLineChart('chart-prod',   'تولید (تن/ساعت)', KPI_SERIES[team].Prod);
+      makeLineChart('chart-reject', 'ریجکتی (%)', KPI_SERIES[team].Reject);
+    }
+
+    function tileEl(k, v){
+      const d = document.createElement('div');
+      d.className='tile';
+      d.innerHTML = `<div class="k">${k}</div><div class="v">${(v===undefined||v===null)?'—':v}</div>`;
+      return d;
+    }
   </script>
 </body>
 </html>

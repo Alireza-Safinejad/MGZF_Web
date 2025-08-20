@@ -70,11 +70,10 @@
     }
     .footer{margin-top:12px; color:#94a3b8; font-size:.85rem; text-align:center}
     .back{display:inline-flex; gap:8px; align-items:center; color:#93c5fd; cursor:pointer; margin-bottom:12px}
-    /* Splash full-screen */
     #splash{position:fixed; inset:0; display:grid; place-items:center; background: radial-gradient(900px 500px at 120% -20%, #0b1530 0%, transparent 60%), #0a0f1f; z-index:10}
     #splash.fade{animation: fadeout .5s ease forwards}
     @keyframes fadeout{to{opacity:0; visibility:hidden}}
-    textarea{resize:none}
+    textarea{resize:none; min-height:80px;}
   </style>
 </head>
 <body>
@@ -120,9 +119,7 @@
   <div id="screen-shifts" class="card" style="display:none">
     <div class="back" id="back-to-units">← بازگشت به واحدها</div>
     <h1 id="unit-title">شیفت‌ها</h1>
-    <div class="grid" id="shifts-grid">
-      <!-- شیفت‌ها اینجا اضافه می‌شوند -->
-    </div>
+    <div class="grid" id="shifts-grid"></div>
     <div class="footer">انتخاب شیفت برای مشاهده KPI و گزارش</div>
   </div>
 
@@ -134,7 +131,7 @@
     <p id="shift-supervisor"></p>
     <div class="grid kpi" id="kpi-grid"></div>
     <h3>گزارش شیفت</h3>
-    <p id="shift-report">گزارش به روز رسانی خواهد شد.</p>
+    <textarea id="shift-report" placeholder="گزارش شیفت را اینجا بنویسید..."></textarea>
     <label>نظر مدیر واحد</label>
     <textarea id="manager-comment" placeholder="نظر خود را بنویسید..."></textarea>
   </div>
@@ -144,13 +141,11 @@
     localStorage.setItem('mgzf_dev_id', devId);
     document.getElementById('dev-id').textContent = devId.slice(0, 8);
 
-    // Splash
     setTimeout(() => {
       document.getElementById('splash').classList.add('fade');
       setTimeout(()=> showScreen('login'), 350);
     }, 2000);
 
-    // Screens controller
     function showScreen(name){
       document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
       document.getElementById('screen-units').style.display = (name==='units')?'block':'none';
@@ -172,9 +167,9 @@
       }
     });
     document.getElementById('back-to-login').addEventListener('click', ()=> showScreen('login'));
-
-    // --- Units ---
     document.getElementById('back-to-units').addEventListener('click', ()=> showScreen('units'));
+    document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
+
     const unitsData = {
       mine: {name:"واحد معدن", shifts:[
         {name:'A', hours:'07:00 - 15:00', supervisor:'سعید', kpi:{FeO:'12.5%', Humidity:'8.2%', Blending:'3500', Production:'500 تن', Reject:'2.1%'}},
@@ -232,8 +227,6 @@
       });
     });
 
-    document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
-
     function renderShift(unit, shiftName){
       const shift = unitsData[unit].shifts.find(s=>s.name===shiftName);
       document.getElementById('shift-title').textContent = `${unitsData[unit].name} - شیفت ${shift.name}`;
@@ -247,9 +240,9 @@
         el.innerHTML=`<h3>${k}</h3><div class="v">${v}</div>`;
         grid.appendChild(el);
       }
+      document.getElementById('shift-report').value='';
       document.getElementById('manager-comment').value='';
     }
-
   </script>
 </body>
 </html>

@@ -25,7 +25,7 @@ body::before {
   position: fixed;
   top:0; left:0;
   width:100%; height:100%;
-  background: url('Gz.PNG') center/cover no-repeat;
+  background: url('Gz.PNG') center/80% no-repeat;
   opacity:0.1;
   filter: blur(5px);
   z-index:0;
@@ -76,7 +76,7 @@ button, input {
   display:flex;
   flex-direction:column;
   max-width:300px;
-  margin:2rem auto;
+  margin:3rem auto;
   background-color: var(--card);
   padding:1rem;
   border-radius:0.5rem;
@@ -84,9 +84,10 @@ button, input {
   position: relative;
   z-index:1;
 }
-.login-container img {
-  max-width:100px;
-  margin-bottom:1rem;
+.login-container input {
+  width: 50%;
+  display:block;
+  margin:0.5rem auto;
 }
 .hidden { display:none; }
 .back-btn {
@@ -114,7 +115,7 @@ button, input {
 
 <!-- صفحه لاگین -->
 <div id="loginPage" class="login-container">
-  <img src="Gz.PNG" alt="لوگو">
+  <img src="Gz.PNG" alt="لوگو" style="max-width:100px; margin-bottom:1rem;">
   <div>ورود به سامانه شیفت شرکت معدنی و صنعتی گهرزمین</div>
   <input type="text" id="username" placeholder="نام کاربری">
   <input type="password" id="password" placeholder="رمز عبور">
@@ -182,22 +183,32 @@ let isManager=false;
 let currentUnit=null;
 let currentShift=null;
 
+// تعیین واحد هر مدیر
+const managerUnitMap = {1:0,2:1,3:2,4:3,5:4};
+
 // لاگین
 function login(){
   const u=parseInt(document.getElementById('username').value);
   const p=document.getElementById('password').value;
   const msg=document.getElementById('loginMsg');
   if(p!=='123'){ msg.textContent='رمز عبور اشتباه است'; return; }
-  if(u>=1 && u<=5){ isManager=true; }
-  else if(u>=1000 && u<=1800){ isManager=false; }
+  if(u>=1 && u<=5){ 
+    isManager=true; 
+    currentUnit=managerUnitMap[u]; 
+    showShiftsPage(); 
+    return; 
+  }
+  else if(u>=1000 && u<=1800){ 
+    isManager=false; 
+    showUnitsPage(); 
+    return; 
+  }
   else{ msg.textContent='نام کاربری اشتباه است'; return; }
-
-  document.getElementById('loginPage').classList.add('hidden');
-  showUnitsPage();
 }
 
 // صفحات
 function showUnitsPage(){
+  document.getElementById('loginPage').classList.add('hidden');
   const listDiv=document.getElementById('unitList');
   listDiv.innerHTML='';
   units.forEach((unit,idx)=>{
@@ -210,6 +221,7 @@ function showUnitsPage(){
 }
 
 function showShiftsPage(){
+  document.getElementById('loginPage').classList.add('hidden');
   document.getElementById('unitsPage').classList.add('hidden');
   const listDiv=document.getElementById('shiftList');
   listDiv.innerHTML='';
@@ -229,10 +241,13 @@ function showDetailsPage(){
   const shift=unit.shifts[currentShift];
   const content=document.getElementById('detailContent');
   content.innerHTML=`<div class="shift-title">شیفت ${shift.name} | ${shift.time} | سرپرست: ${shift.supervisor}</div>`;
+
   if(isManager){
-    content.innerHTML+=`<div>نظر مدیر: <textarea placeholder="نظر خود را وارد کنید"></textarea></div>`;
-  } else{
-    content.innerHTML+=`<div>نظر مدیر: در حال بروز رسانی</div>`;
+    content.innerHTML+=`<div>گزارش شیفت: <textarea readonly>در حال بروز رسانی</textarea></div>`;
+    content.innerHTML+=`<div>نظر مدیر واحد: <textarea placeholder="نظر خود را وارد کنید"></textarea></div>`;
+  } else {
+    content.innerHTML+=`<div>گزارش شیفت: <textarea placeholder="گزارش خود را وارد کنید"></textarea></div>`;
+    content.innerHTML+=`<div>نظر مدیر واحد: در حال بروز رسانی</div>`;
   }
 
   if(unit.type==='general'){
@@ -242,10 +257,10 @@ function showDetailsPage(){
     content.innerHTML+=`<div>برق: ${shift.data.برق}<br>آب: ${shift.data.آب}<br>گاز: ${shift.data.گاز}</div>`;
     content.innerHTML+=`<canvas id="chartEnergy"></canvas>`;
   }
+
   document.getElementById('detailsPage').classList.remove('hidden');
 
-  // نمودار
-  setTimeout(()=>{ // تا DOM کامل شود
+  setTimeout(()=>{
     if(unit.type==='general'){
       new Chart(document.getElementById('chartFEO'),{
         type:'bar',
@@ -268,10 +283,11 @@ function showDetailsPage(){
   },100);
 }
 
-// دکمه بازگشت
+// بازگشت
 function goBackLogin(){ document.getElementById('unitsPage').classList.add('hidden'); document.getElementById('loginPage').classList.remove('hidden'); }
-function goBackUnits(){ document.getElementById('shiftsPage').classList.add('hidden'); showUnitsPage(); }
+function goBackUnits(){ document.getElementById('shiftsPage').classList.add('hidden'); if(!isManager) showUnitsPage(); else showShiftsPage(); }
 function goBackShifts(){ document.getElementById('detailsPage').classList.add('hidden'); showShiftsPage(); }
 </script>
+
 </body>
 </html>

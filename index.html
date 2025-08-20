@@ -1,208 +1,154 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gohar Zamin – Factory Monitor (Web)</title>
-  <style>
-    :root{
-      --brand:#003087;
-      --bg:#0f172a;
-      --card:#111827;
-      --muted:#94a3b8;
-      --text:#e5e7eb;
-      --accent:#2563eb;
-      --ok:#16a34a;
-      --danger:#dc2626;
-      --shadow: 0 10px 30px rgba(0,0,0,.25);
-      --radius:14px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:
-        radial-gradient(1200px 600px at 120% -10%, #0b1530 0%, transparent 60%),
-        radial-gradient(1000px 800px at -10% 110%, #13223f 0%, transparent 60%),
-        linear-gradient(180deg,#0a0f1f 0%, #0f172a 100%);
-      color:var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Vazirmatn", Arial, sans-serif;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .card{
-      width:min(520px, 92vw); background:rgba(17,24,39,.65); backdrop-filter: blur(8px);
-      border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px;
-    }
-    .center{display:flex; align-items:center; justify-content:center}
-    .logo{
-      width:120px;height:120px;border-radius:50%; background:var(--brand);
-      display:grid; place-items:center; box-shadow:0 12px 40px rgba(0,48,135,.45), inset 0 0 0 6px rgba(255,255,255,.08);
-      margin:24px auto 16px;
-    }
-    .logo span{font-size:44px;font-weight:800; letter-spacing:.5px; color:white}
-    h1{margin:.25rem 0 1rem 0; font-size:1.4rem; text-align:center}
-    p.muted{color:var(--muted); text-align:center; margin:.25rem 0 1.25rem 0}
-    label{display:block; font-size:.95rem; margin:.5rem 0 .35rem 0; color:#cbd5e1}
-    input{
-      width:100%; padding:12px 14px; background:#0b1324; color:var(--text);
-      border:1px solid rgba(255,255,255,.08); border-radius:10px; outline:none;
-    }
-    input:focus{border-color:#334155; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
-    .row{display:flex; gap:12px}
-    .row>*{flex:1}
-    .btn{
-      width:100%; margin-top:14px; padding:12px 16px; border-radius:10px; border:none; color:white; background:linear-gradient(90deg,#2563eb,#1d4ed8);
-      cursor:pointer; font-size:1rem; font-weight:700; letter-spacing:.3px; box-shadow:0 8px 26px rgba(37,99,235,.35);
-    }
-    .btn:active{transform: translateY(1px)}
-    .alert{margin:.5rem 0; padding:.6rem .8rem; border-radius:10px; font-size:.95rem; background:#1f2937}
-    .alert.ok{border:1px solid rgba(22,163,74,.45); color:#bbf7d0; background:rgba(22,163,74,.12)}
-    .alert.err{border:1px solid rgba(220,38,38,.45); color:#fecaca; background:rgba(220,38,38,.12)}
-    .grid{display:grid; gap:12px}
-    .grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr))}
-    .tile{
-      background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.05);
-      padding:14px; border-radius:12px;
-    }
-    .tile h3{margin:.2rem 0 .4rem 0; font-size:1rem}
-    .tile .v{color:#e2e8f0; font-weight:700}
-    .ghost{
-      padding:10px 14px; border-radius:10px; border:1px dashed rgba(148,163,184,.35);
-      color:#cbd5e1; text-align:center; margin-top:8px;
-    }
-    .footer{margin-top:12px; color:#94a3b8; font-size:.85rem; text-align:center}
-    .back{display:inline-flex; gap:8px; align-items:center; color:#93c5fd; cursor:pointer; margin-bottom:12px}
-    #splash{position:fixed; inset:0; display:grid; place-items:center; background: radial-gradient(900px 500px at 120% -20%, #0b1530 0%, transparent 60%), #0a0f1f; z-index:10}
-    #splash.fade{animation: fadeout .5s ease forwards}
-    @keyframes fadeout{to{opacity:0; visibility:hidden}}
-    canvas{width:100%; height:80px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>گهرزمین – Factory Monitor (Web)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --brand:#003087; --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e5e7eb;
+  --accent:#2563eb; --ok:#16a34a; --danger:#dc2626; --shadow: 0 10px 30px rgba(0,0,0,.25);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; background:#0f172a; color:var(--text); font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Vazirmatn",Arial,sans-serif; display:flex; align-items:center; justify-content:center;}
+.card{width:min(520px,92vw); background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);}
+.center{display:flex; align-items:center; justify-content:center;}
+.logo{width:120px;height:120px;border-radius:50%; background:var(--brand); display:grid; place-items:center; margin:24px auto 16px; font-size:44px; font-weight:800; color:white;}
+h1{text-align:center; margin:0.5rem 0;}
+p.muted{text-align:center; color:var(--muted);}
+input{width:100%; padding:12px; margin:4px 0 12px 0; border-radius:10px; border:1px solid rgba(255,255,255,.2); background:#0b1324; color:var(--text);}
+.btn{width:100%; padding:12px; border:none; border-radius:10px; background:var(--accent); color:white; font-weight:700; cursor:pointer; margin-top:10px;}
+.alert{padding:6px 10px; border-radius:10px; margin:5px 0; display:none;}
+.alert.err{background:rgba(220,38,38,.1); border:1px solid rgba(220,38,38,.4); color:#fecaca;}
+.grid{display:grid; gap:12px;}
+.grid.kpi{grid-template-columns: repeat(2,1fr);}
+.tile{background:rgba(2,6,23,.55); border-radius:12px; padding:12px;}
+.footer{text-align:center; margin-top:12px; color:var(--muted);}
+.back{cursor:pointer; color:#93c5fd; margin-bottom:12px; display:inline-block;}
+</style>
 </head>
 <body>
 
-  <!-- Splash -->
-  <div id="splash">
-    <div class="center" style="flex-direction:column">
-      <div class="logo"><span>GZ</span></div>
-      <p class="muted">در حال آماده‌سازی…</p>
-    </div>
-  </div>
+<!-- Splash -->
+<div id="splash" class="center" style="position:fixed; inset:0; background:#0b1324; z-index:10; flex-direction:column;">
+  <div class="logo">GZ</div>
+  <p class="muted">در حال آماده‌سازی…</p>
+</div>
 
-  <!-- Login -->
-  <div id="screen-login" class="card" style="display:none">
-    <div class="logo"><span>GZ</span></div>
-    <h1>ورود به سامانه مانیتورینگ</h1>
-    <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
-    <div id="login-alert" class="alert err" style="display:none"></div>
-    <label>نام کاربری</label>
-    <input id="username" placeholder="مثلاً: admin" autocomplete="username">
-    <label>رمز عبور</label>
-    <input id="password" type="password" placeholder="مثلاً: 123" autocomplete="current-password">
-    <button id="btn-login" class="btn">ورود</button>
-    <div class="ghost" id="devline">Device: Web • ID (mock): <span id="dev-id">—</span></div>
-    <div class="footer">© Gohar Zamin • Demo</div>
-  </div>
+<!-- Login -->
+<div id="screen-login" class="card" style="display:none;">
+  <div class="logo">GZ</div>
+  <h1>ورود به سامانه مانیتورینگ</h1>
+  <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
+  <div id="login-alert" class="alert err"></div>
+  <input id="username" placeholder="نام کاربری" autocomplete="username">
+  <input id="password" type="password" placeholder="رمز عبور" autocomplete="current-password">
+  <button id="btn-login" class="btn">ورود</button>
+  <div class="footer">© Gohar Zamin • Demo</div>
+</div>
 
-  <!-- Shifts -->
-  <div id="screen-shifts" class="card" style="display:none">
-    <div class="back" id="back-to-login">← خروج</div>
-    <h1>شیفت‌های کارخانه گندله‌سازی</h1>
-    <div class="grid">
-      <button class="btn" data-shift="A">شیفت A (07:00–15:00) – مسئول: سعید</button>
-      <button class="btn" data-shift="B">شیفت B (15:00–23:00) – مسئول: نورمندی</button>
-      <button class="btn" data-shift="C">شیفت C (23:00–07:00) – مسئول: امامی</button>
-      <button class="btn" data-shift="D">شیفت D (استراحت) – مسئول: روح الامینی</button>
-    </div>
-    <div class="footer">انتخاب شیفت برای مشاهده KPI</div>
-  </div>
+<!-- Shifts -->
+<div id="screen-shifts" class="card" style="display:none;">
+  <div class="back" id="back-to-login">← خروج</div>
+  <h1>شیفت‌های کارخانه گندله‌سازی</h1>
+  <div class="grid" id="shift-grid"></div>
+  <div class="footer">انتخاب شیفت برای مشاهده KPI</div>
+</div>
 
-  <!-- Shift Details -->
-  <div id="screen-details" class="card" style="display:none">
-    <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
-    <h1 id="shift-title">جزئیات شیفت</h1>
-    <div class="grid kpi" id="kpi-grid"></div>
-  </div>
+<!-- Shift Details -->
+<div id="screen-details" class="card" style="display:none;">
+  <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
+  <h1 id="shift-title">جزئیات شیفت</h1>
+  <p id="shift-info" style="text-align:center; margin:5px 0;"></p>
+  <div class="grid kpi" id="kpi-grid"></div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const devId = localStorage.getItem('mgzf_dev_id') || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
-    localStorage.setItem('mgzf_dev_id', devId);
-    document.getElementById('dev-id').textContent = devId.slice(0, 8);
+<script>
+// Splash
+setTimeout(()=>{document.getElementById('splash').style.display='none'; showScreen('login');}, 2000);
 
-    setTimeout(() => {
-      document.getElementById('splash').classList.add('fade');
-      setTimeout(()=> showScreen('login'), 350);
-    }, 2000);
+// Screen controller
+function showScreen(name){
+  document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
+  document.getElementById('screen-shifts').style.display = (name==='shifts')?'block':'none';
+  document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
+}
 
-    function showScreen(name){
-      document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
-      document.getElementById('screen-shifts').style.display = (name==='shifts')?'block':'none';
-      document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
-    }
+// Login
+document.getElementById('btn-login').addEventListener('click', ()=>{
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value.trim();
+  const alertBox = document.getElementById('login-alert');
+  if(u==='admin' && p==='123'){ alertBox.style.display='none'; showScreen('shifts'); initShifts(); }
+  else{ alertBox.textContent='نام کاربری یا رمز اشتباه است'; alertBox.style.display='block'; }
+});
 
-    // --- Login
-    document.getElementById('btn-login').addEventListener('click', ()=>{
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value.trim();
-      const alertBox = document.getElementById('login-alert');
-      if (u==='admin' && p==='123'){
-        alertBox.style.display='none';
-        showScreen('shifts');
-      } else {
-        alertBox.textContent = 'نام کاربری یا رمز اشتباه است';
-        alertBox.style.display = 'block';
-      }
-    });
+// --- Shifts data
+const shifts = [
+  {name:'A', start:'07:00', end:'15:00', manager:'سعید'},
+  {name:'B', start:'15:00', end:'23:00', manager:'نورمندی'},
+  {name:'C', start:'23:00', end:'07:00', manager:'امامی'},
+  {name:'D', start:'- استراحت -', end:'-', manager:'روح الامینی'}
+];
 
-    document.getElementById('back-to-login').addEventListener('click', ()=>showScreen('login'));
-    document.getElementById('back-to-shifts').addEventListener('click', ()=>showScreen('shifts'));
+// Mock KPI data
+const mockData = {
+  'آلارم‌ها':'آلارم سنسور 1، آلارم رطوبت بالا',
+  'توقفات':'توقف 2 ساعته در خط تولید',
+  'درصد رطوبت':'8.2%',
+  'درصد FeO':'12.5%',
+  'میزان بلین':'3500',
+  'میزان تولید در ساعت':'500 تن',
+  'میزان ریجکتی':'2.1%',
+};
 
-    // --- Mock KPI data
-    const mockData = {
-      'آلارم‌ها'            : [5, 3, 6, 2, 4, 5, 3],
-      'توقفات'             : [2, 4, 1, 3, 2, 0, 1],
-      'درصد رطوبت'         : [8.2, 9.1, 7.8, 8.5, 8.0, 8.3, 8.1],
-      'درصد FeO'           : [12.5, 11.8, 12.0, 12.2, 12.6, 12.3, 12.1],
-      'میزان بلین'         : [3500, 3550, 3480, 3520, 3500, 3490, 3510],
-      'میزان تولید در ساعت': [500, 520, 480, 510, 500, 495, 505],
-      'میزان ریجکتی'       : [2.1, 2.0, 2.5, 2.2, 2.3, 2.1, 2.4],
-    };
+// Init shift buttons
+function initShifts(){
+  const grid = document.getElementById('shift-grid');
+  grid.innerHTML='';
+  shifts.forEach(s=>{
+    const btn = document.createElement('button');
+    btn.className='btn';
+    btn.textContent=`شیفت ${s.name} - ${s.start} تا ${s.end} (${s.manager})`;
+    if(isShiftActive(s)) btn.textContent += ' (در حال اجرا)';
+    btn.addEventListener('click', ()=> showShiftDetails(s));
+    grid.appendChild(btn);
+  });
+}
 
-    function renderShift(shift){
-      document.getElementById('shift-title').textContent = 'جزئیات شیفت ' + shift;
-      const grid = document.getElementById('kpi-grid');
-      grid.innerHTML = '';
+// Active shift logic
+function isShiftActive(s){
+  const now = new Date();
+  const h = now.getHours();
+  if(s.name==='A' && h>=7 && h<15) return true;
+  if(s.name==='B' && h>=15 && h<23) return true;
+  if(s.name==='C' && (h>=23 || h<7)) return true;
+  return false;
+}
 
-      Object.entries(mockData).forEach(([k,v])=>{
-        const tile = document.createElement('div');
-        tile.className='tile';
-        tile.innerHTML=`<h3>${k}</h3><canvas></canvas>`;
-        grid.appendChild(tile);
+// Show shift details
+function showShiftDetails(shift){
+  showScreen('details');
+  document.getElementById('shift-title').textContent='جزئیات شیفت '+shift.name;
+  document.getElementById('shift-info').textContent=`مدیر: ${shift.manager} | ساعت: ${shift.start} - ${shift.end}`;
+  const grid = document.getElementById('kpi-grid');
+  grid.innerHTML='';
+  Object.entries(mockData).forEach(([k,v])=>{
+    const div = document.createElement('div');
+    div.className='tile';
+    div.innerHTML=`<h3>${k}</h3><canvas id="chart-${k}"></canvas><p style="text-align:center;">${v}</p>`;
+    grid.appendChild(div);
+    const ctx = div.querySelector('canvas').getContext('2d');
+    new Chart(ctx,{type:'bar',data:{labels:[k],datasets:[{label:k,data:[Math.random()*100],backgroundColor:'#2563eb'}]}});
+  });
+}
 
-        const ctx = tile.querySelector('canvas').getContext('2d');
-        new Chart(ctx,{
-          type:'line',
-          data:{
-            labels:v.map((_,i)=>`ساعت ${i+1}`),
-            datasets:[{
-              label:k,
-              data:v,
-              borderColor:'#2563eb',
-              backgroundColor:'rgba(37,99,235,.15)',
-              tension:0.3,
-              fill:true
-            }]
-          },
-          options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
-        });
-      });
-    }
+// Back buttons
+document.getElementById('back-to-login').addEventListener('click', ()=> showScreen('login'));
+document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
 
-    document.querySelectorAll('#screen-shifts .btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const shift = btn.dataset.shift;
-        renderShift(shift);
-        showScreen('details');
-      });
-    });
-  </script>
+</script>
 </body>
 </html>

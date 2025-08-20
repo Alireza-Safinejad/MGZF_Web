@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>سامانه مانیتورینگ کارخانه گهرزمین</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Gohar Zamin – Factory Monitor</title>
   <style>
     :root{
       --brand:#003087;
@@ -15,7 +14,7 @@
       --accent:#2563eb;
       --ok:#16a34a;
       --danger:#dc2626;
-      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
       --radius:14px;
     }
     *{box-sizing:border-box}
@@ -61,7 +60,7 @@
     .grid.kpi{grid-template-columns: repeat(2, minmax(0,1fr))}
     .tile{
       background:rgba(2,6,23,.55); border:1px solid rgba(255,255,255,.05);
-      padding:14px; border-radius:12px;
+      padding:14px; border-radius:12px; cursor:pointer;
     }
     .tile h3{margin:.2rem 0 .4rem 0; font-size:1rem}
     .tile .v{color:#e2e8f0; font-weight:700}
@@ -71,10 +70,11 @@
     }
     .footer{margin-top:12px; color:#94a3b8; font-size:.85rem; text-align:center}
     .back{display:inline-flex; gap:8px; align-items:center; color:#93c5fd; cursor:pointer; margin-bottom:12px}
+    /* Splash full-screen */
     #splash{position:fixed; inset:0; display:grid; place-items:center; background: radial-gradient(900px 500px at 120% -20%, #0b1530 0%, transparent 60%), #0a0f1f; z-index:10}
     #splash.fade{animation: fadeout .5s ease forwards}
     @keyframes fadeout{to{opacity:0; visibility:hidden}}
-    canvas{width:100%; height:100px;}
+    canvas{width:100%!important; height:200px!important;}
   </style>
 </head>
 <body>
@@ -110,30 +110,38 @@
     <div class="footer">انتخاب شیفت برای مشاهده KPI</div>
   </div>
 
-  <!-- Shift Details -->
-  <div id="screen-details" class="card" style="display:none;">
+  <!-- Shift Details / KPI -->
+  <div id="screen-details" class="card" style="display:none">
     <div class="back" id="back-to-shifts">← بازگشت به شیفت‌ها</div>
     <h1 id="shift-title">جزئیات شیفت</h1>
-    <p id="shift-info" style="text-align:center; margin:5px 0;"></p>
     <div class="grid kpi" id="kpi-grid"></div>
+    <div id="kpi-chart-container"></div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     // --- Mock device id
     const devId = localStorage.getItem('mgzf_dev_id') || (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
     localStorage.setItem('mgzf_dev_id', devId);
     document.getElementById('dev-id').textContent = devId.slice(0, 8);
 
-    // Splash
+    // --- Splash 2s then show login
     setTimeout(() => {
       document.getElementById('splash').classList.add('fade');
       setTimeout(()=> showScreen('login'), 350);
     }, 2000);
 
+    // --- Screens controller
     function showScreen(name){
       document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
       document.getElementById('screen-shifts').style.display = (name==='shifts')?'block':'none';
       document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
+      // پاک کردن نمودارها هنگام رفتن به صفحه قبل
+      if(name!=='details'){
+        document.getElementById('kpi-grid').innerHTML='';
+        document.getElementById('kpi-chart-container').innerHTML='';
+        chartInstances={};
+      }
     }
 
     // --- Login
@@ -149,6 +157,7 @@
       }
       if (u==='admin' && p==='123'){
         alertBox.style.display='none';
+        renderShifts();
         showScreen('shifts');
       } else {
         alertBox.textContent = 'نام کاربری یا رمز اشتباه است';
@@ -157,62 +166,83 @@
     });
 
     document.getElementById('back-to-login').addEventListener('click', ()=> showScreen('login'));
+    document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
 
-    // --- Shifts Data
+    // --- Shift definitions
     const shifts = [
-      {name:'A', manager:'آقای سعید', start:'07:00', end:'15:00'},
-      {name:'B', manager:'آقای نورمندی', start:'15:00', end:'23:00'},
-      {name:'C', manager:'آقای امامی', start:'23:00', end:'07:00'},
-      {name:'D', manager:'آقای روح الامینی', start:'استراحت', end:'استراحت'}
+      {name:'A', time:'07:00 - 15:00', leader:'آقای سعید'},
+      {name:'B', time:'15:00 - 23:00', leader:'آقای نورمندی'},
+      {name:'C', time:'23:00 - 07:00', leader:'آقای امامی'},
+      {name:'D', time:'استراحت', leader:'آقای روح الامینی'}
     ];
 
+    // --- Mock KPI data
     const mockData = {
+      'آلارم‌ها':'آلارم سنسور 1، آلارم رطوبت بالا',
+      'توقفات':'توقف 2 ساعته در خط تولید',
       'درصد رطوبت':'8.2%',
       'درصد FeO':'12.5%',
       'میزان بلین':'3500',
-      'توقفات':'2 ساعت',
-      'آلارم‌ها':'آلارم سنسور 1',
       'میزان تولید در ساعت':'500 تن',
-      'میزان ریجکتی':'2.1%'
+      'میزان ریجکتی':'2.1%',
     };
 
-    const shiftGrid = document.getElementById('shift-grid');
-    shifts.forEach(shift=>{
-      const btn = document.createElement('button');
-      btn.className='btn';
-      btn.textContent=`شیفت ${shift.name} | ${shift.start} - ${shift.end} | مدیر: ${shift.manager}`;
-      btn.addEventListener('click', ()=> showShiftDetails(shift));
-      shiftGrid.appendChild(btn);
-    });
+    let chartInstances={};
 
-    // --- Back from details
-    document.getElementById('back-to-shifts').addEventListener('click', ()=>{
-      showScreen('shifts');
-      document.getElementById('kpi-grid').innerHTML='';
-    });
-
-    function showShiftDetails(shift){
-      showScreen('details');
-      document.getElementById('shift-title').textContent='جزئیات شیفت '+shift.name;
-      document.getElementById('shift-info').textContent=`مدیر: ${shift.manager} | ساعت: ${shift.start} - ${shift.end}`;
-      const grid = document.getElementById('kpi-grid');
+    function renderShifts(){
+      const grid = document.getElementById('shift-grid');
       grid.innerHTML='';
-      Object.entries(mockData).forEach(([k,v])=>{
-        const div = document.createElement('div');
-        div.className='tile';
-        div.innerHTML=`<h3>${k}</h3><canvas id="chart-${k}"></canvas><p style="text-align:center;">${v}</p>`;
-        grid.appendChild(div);
-        const ctx = div.querySelector('canvas').getContext('2d');
-        new Chart(ctx,{
-          type:'bar',
-          data:{
-            labels:[k],
-            datasets:[{label:k,data:[Math.random()*100],backgroundColor:'#2563eb'}]
-          },
-          options:{responsive:true, maintainAspectRatio:false}
+      shifts.forEach(s=>{
+        const btn = document.createElement('button');
+        btn.className='btn';
+        btn.textContent = `شیفت ${s.name} • ${s.time} • سرپرست: ${s.leader}`;
+        btn.addEventListener('click', ()=>{
+          renderShift(s);
+          showScreen('details');
         });
+        grid.appendChild(btn);
       });
     }
+
+    function renderShift(shift){
+      document.getElementById('shift-title').textContent='جزئیات شیفت '+shift.name;
+      const grid = document.getElementById('kpi-grid');
+      grid.innerHTML='';
+      document.getElementById('kpi-chart-container').innerHTML='';
+      chartInstances={};
+
+      Object.entries(mockData).forEach(([k,v])=>{
+        const el = document.createElement('div');
+        el.className='tile';
+        el.innerHTML=`<h3>${k}</h3><div class="v">${v}</div>`;
+        el.addEventListener('click', ()=>{
+          renderKPIChart(k,v);
+        });
+        grid.appendChild(el);
+      });
+    }
+
+    function renderKPIChart(kpiName, kpiValue){
+      const container = document.getElementById('kpi-chart-container');
+      container.innerHTML='';
+      if(chartInstances[kpiName]) chartInstances[kpiName].destroy();
+      const canvas=document.createElement('canvas');
+      container.appendChild(canvas);
+
+      chartInstances[kpiName]=new Chart(canvas,{
+        type:'bar',
+        data:{
+          labels:['مقدار فعلی'],
+          datasets:[{
+            label:kpiName,
+            data:[parseFloat(kpiValue) || Math.random()*100],
+            backgroundColor:'#2563eb'
+          }]
+        },
+        options:{responsive:true, maintainAspectRatio:false}
+      });
+    }
+
   </script>
 </body>
 </html>

@@ -20,6 +20,16 @@ body {
   color: var(--text);
   position: relative;
 }
+body::before {
+  content:"";
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: url('Gz.PNG') center/60% no-repeat;
+  opacity:0.1;
+  filter: blur(5px);
+  z-index:0;
+}
 header {
   background-color: var(--brand);
   padding: 1rem;
@@ -27,9 +37,12 @@ header {
   font-size: 1.5rem;
   font-weight: bold;
   position: relative;
+  z-index:1;
 }
 .container {
   padding: 1rem;
+  position: relative;
+  z-index:1;
 }
 .unit-card, .shift-card, .detail-card {
   background-color: var(--card);
@@ -58,7 +71,6 @@ button, input {
   border-radius: 0.25rem;
   border: none;
   margin:0.3rem 0;
-  font-size: 1rem;
 }
 .login-container {
   display:flex;
@@ -69,10 +81,18 @@ button, input {
   padding:1rem;
   border-radius:0.5rem;
   text-align:center;
+  position: relative;
+  z-index:1;
 }
-.login-container input, .login-container button {
-  width: 100%;
-  margin:0.5rem 0;
+.login-container input {
+  width: 50%;
+  display:block;
+  margin:0.5rem auto;
+}
+.login-container button {
+  width: 50%;
+  display:block;
+  margin:0.5rem auto;
 }
 .hidden { display:none; }
 .back-btn {
@@ -92,25 +112,15 @@ button, input {
   margin:0.3rem 0;
   cursor:pointer;
 }
-body.login-page::before {
-  content:"";
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: url('Gz.PNG') center/40% no-repeat;
-  opacity:0.1;
-  filter: blur(5px);
-  z-index:0;
-}
 </style>
 </head>
-<body class="login-page">
+<body>
 
 <header>سامانه شیفت شرکت معدنی و صنعتی گهرزمین</header>
 
 <!-- صفحه لاگین -->
 <div id="loginPage" class="login-container">
-  <img src="Gz.PNG" alt="لوگو" style="width:80px; margin-bottom:1rem;">
+  <img src="Gz.PNG" alt="لوگو" style="width:50px; margin-bottom:1rem;">
   <div>ورود به سامانه شیفت شرکت معدنی و صنعتی گهرزمین</div>
   <input type="text" id="username" placeholder="نام کاربری">
   <input type="password" id="password" placeholder="رمز عبور">
@@ -142,34 +152,34 @@ body.login-page::before {
 <script>
 const units = [
   { name:'واحد معدن', type:'general', shifts:[
-    {name:'A', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
-    {name:'B', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
-    {name:'C', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
-    {name:'D', supervisor:'آقای ملکشاهی', data:{}}
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
+    {name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{}}
   ]},
   { name:'واحد فرآوری و خردایش', type:'general', shifts:[
-    {name:'A', supervisor:'آقای قاسمی', data:{FEO:0.01, رطوبت:10, بلین:1250}},
-    {name:'B', supervisor:'آقای طوسی', data:{FEO:0.011, رطوبت:9, بلین:1230}},
-    {name:'C', supervisor:'آقای ابراهیمی', data:{FEO:0.009, رطوبت:8, بلین:1220}},
-    {name:'D', supervisor:'آقای ملکشاهی', data:{}}
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.01, رطوبت:10, بلین:1250}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.011, رطوبت:9, بلین:1230}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.009, رطوبت:8, بلین:1220}},
+    {name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{}}
   ]},
   { name:'واحد گندله‌سازی', type:'general', shifts:[
-    {name:'A', supervisor:'آقای سعید', data:{FEO:0.008, رطوبت:8, بلین:1200}},
-    {name:'B', supervisor:'آقای نورمندی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
-    {name:'C', supervisor:'آقای امامی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
-    {name:'D', supervisor:'آقای روح‌الامینی', data:{}}
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای سعید', data:{FEO:0.008, رطوبت:8, بلین:1200}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای امامی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
+    {name:'D', time:'استراحت', supervisor:'آقای روح‌الامینی', data:{}}
   ]},
   { name:'واحد انرژی و سیالات', type:'energy', shifts:[
-    {name:'A', supervisor:'حسن', data:{برق:80, آب:60, گاز:50}},
-    {name:'B', supervisor:'آقای نورمندی', data:{برق:85, آب:62, گاز:52}},
-    {name:'C', supervisor:'آقای خواجویی', data:{برق:78, آب:58, گاز:49}},
-    {name:'D', supervisor:'آقای مجیدی', data:{}}
+    {name:'A', time:'07:00 - 15:00', supervisor:'حسن', data:{برق:80, آب:60, گاز:50}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{برق:85, آب:62, گاز:52}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای خواجویی', data:{برق:78, آب:58, گاز:49}},
+    {name:'D', time:'استراحت', supervisor:'آقای مجیدی', data:{}}
   ]},
   { name:'واحد آزمایشگاه', type:'general', shifts:[
-    {name:'A', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
-    {name:'B', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
-    {name:'C', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
-    {name:'D', supervisor:'آقای ملکشاهی', data:{}}
+    {name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
+    {name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
+    {name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
+    {name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{}}
   ]}
 ];
 
@@ -232,7 +242,7 @@ function showDetailsPage(){
   const unit=units[currentUnit];
   const shift=unit.shifts[currentShift];
   const content=document.getElementById('detailContent');
-  content.innerHTML=`<div class="shift-title">شیفت ${shift.name} | سرپرست: ${shift.supervisor}</div>`;
+  content.innerHTML=`<div class="shift-title">شیفت ${shift.name} | ${shift.time} | سرپرست: ${shift.supervisor}</div>`;
 
   if(isManager){
     content.innerHTML+=`<div>گزارش شیفت: <textarea readonly>در حال بروز رسانی</textarea></div>`;

@@ -93,9 +93,9 @@
     <p class="muted">نام کاربری و رمز عبور را وارد کنید.</p>
     <div id="login-alert" class="alert err" style="display:none"></div>
     <label>نام کاربری</label>
-    <input id="username" placeholder="مثلاً: admin" autocomplete="username">
+    <input id="username" placeholder="مثلاً: 1 یا 1000" autocomplete="username">
     <label>رمز عبور</label>
-    <input id="password" type="password" placeholder="مثلاً: 123" autocomplete="current-password">
+    <input id="password" type="password" placeholder="۱۲۳" autocomplete="current-password">
     <button id="btn-login" class="btn">ورود</button>
     <div class="ghost" id="devline">Device: Web • ID (mock): <span id="dev-id">—</span></div>
     <div class="footer">© Gohar Zamin • Demo</div>
@@ -131,9 +131,9 @@
     <p id="shift-supervisor"></p>
     <div class="grid kpi" id="kpi-grid"></div>
     <h3>گزارش شیفت</h3>
-    <textarea id="shift-report" placeholder="گزارش شیفت را اینجا بنویسید..."></textarea>
+    <textarea id="shift-report"></textarea>
     <label>نظر مدیر واحد</label>
-    <textarea id="manager-comment" placeholder="نظر خود را بنویسید..."></textarea>
+    <textarea id="manager-comment"></textarea>
   </div>
 
   <script>
@@ -146,6 +146,8 @@
       setTimeout(()=> showScreen('login'), 350);
     }, 2000);
 
+    let userRole = null; // admin / user
+
     function showScreen(name){
       document.getElementById('screen-login').style.display = (name==='login')?'block':'none';
       document.getElementById('screen-units').style.display = (name==='units')?'block':'none';
@@ -153,19 +155,22 @@
       document.getElementById('screen-details').style.display = (name==='details')?'block':'none';
     }
 
-    // --- Login ---
     document.getElementById('btn-login').addEventListener('click', ()=>{
       const u = document.getElementById('username').value.trim();
       const p = document.getElementById('password').value.trim();
       const alertBox = document.getElementById('login-alert');
-      if (u==='admin' && p==='123'){
-        alertBox.style.display='none';
-        showScreen('units');
-      } else {
-        alertBox.textContent = 'نام کاربری یا رمز اشتباه است';
-        alertBox.style.display = 'block';
+      if(p !== '123'){
+        alertBox.textContent='رمز عبور اشتباه است';
+        alertBox.style.display='block';
+        return;
       }
+      if(Number(u)>=1 && Number(u)<=5){ userRole='admin'; }
+      else if(Number(u)>=1000 && Number(u)<=1800){ userRole='user'; }
+      else { alertBox.textContent='نام کاربری نامعتبر است'; alertBox.style.display='block'; return; }
+      alertBox.style.display='none';
+      showScreen('units');
     });
+
     document.getElementById('back-to-login').addEventListener('click', ()=> showScreen('login'));
     document.getElementById('back-to-units').addEventListener('click', ()=> showScreen('units'));
     document.getElementById('back-to-shifts').addEventListener('click', ()=> showScreen('shifts'));
@@ -240,8 +245,19 @@
         el.innerHTML=`<h3>${k}</h3><div class="v">${v}</div>`;
         grid.appendChild(el);
       }
-      document.getElementById('shift-report').value='';
-      document.getElementById('manager-comment').value='';
+      const reportField = document.getElementById('shift-report');
+      const managerField = document.getElementById('manager-comment');
+      if(userRole==='admin'){
+        reportField.value='گزارش در حال بروز رسانی است';
+        reportField.disabled=true;
+        managerField.value='';
+        managerField.disabled=false;
+      } else { // user
+        reportField.value='';
+        reportField.disabled=false;
+        managerField.value='در حال بروز رسانی';
+        managerField.disabled=true;
+      }
     }
   </script>
 </body>

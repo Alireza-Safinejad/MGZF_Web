@@ -1,403 +1,444 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>سامانه شیفت شرکت معدنی و صنعتی گهرزمین</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>سامانه شیفت شرکت معدنی و صنعتی گهرزمین</title>
 
-<!-- Chart.js (برای نمودارها در صفحه جزئیات) -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js برای نمودارها -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
-  :root{
-    --brand:#003087;
-    --bg:#0f172a;
-    --card:#1e293b;
-    --text:#f8fafc;
-    --accent:#2563eb;
-  }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root{
+      --bg1:#0f172a;
+      --card: rgba(30,41,59,0.95);
+      --glass: rgba(255,255,255,0.08);
+      --accent:#2563eb;
+      --text:#f8fafc;
+    }
+    html,body{height:100%;margin:0;font-family:Tahoma, sans-serif;background-color:var(--bg1);color:var(--text);}
 
-  /* صفحه کلی */
-  html,body { height:100%; margin:0; font-family: Tahoma, sans-serif; background-color:var(--bg); color:var(--text); }
+    /* تصویر لوگوِ مات در پس‌زمینه (همه صفحات) */
+    .bg-img{
+      position:fixed; inset:0; z-index:0;
+      background-image: url('Gz.PNG');
+      background-repeat:no-repeat;
+      background-position:center top;
+      background-size:30%;
+      opacity:0.12;
+      filter: blur(4px) saturate(70%);
+      pointer-events:none; /* اجازه تعامل با المان‌های جلوی آن */
+    }
 
-  /* بک‌گراند لوگو (از body background استفاده شده تا هیچ لایه‌ای جلوی ورودی‌ها نباشد) */
-  body {
-    background-image: url('Gz.PNG');
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: 40%; /* زوم اوت شده تا واضح‌تر باشد */
-    background-attachment: fixed;
-  }
+    /* کانتینر صفحات (روی پس‌زمینه) */
+    .page {
+      position:relative;
+      z-index:2;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding-top:48px;
+      box-sizing:border-box;
+    }
 
-  /* کارت لاگین (مرکز صفحه) */
-  .login-container {
-    width: 360px;
-    margin: 4vh auto;
-    background-color: rgba(30,41,59,0.98); /* تیره و مات */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    text-align: center;
-    z-index: 2;
-  }
+    /* ---------- صفحه لاگین ---------- */
+    .login-wrap{ width:100%; display:flex; justify-content:center; align-items:center; min-height:calc(100vh - 40px); }
+    .login-card{
+      width:360px;
+      background:var(--card);
+      border-radius:10px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.5);
+      text-align:center;
+    }
 
-  /* لوگو بالای فرم، وسط */
-  .login-container img.logo {
-    width: 96px;
-    height: auto;
-    display:block;
-    margin: 0 auto 12px auto;
-  }
+    /* لوگو و عنوان فقط در لاگین نمایش داده می‌شوند */
+    .login-card img.logo{ width:110px; height:auto; display:block; margin:0 auto 14px; }
+    .login-title{
+      margin-top:10px; margin-bottom:8px;
+      font-size:18px; color:var(--text); font-weight:700;
+    }
 
-  /* عنوان پایین صفحه (بدون کادر آبی) */
-  .footer-title {
-    text-align:center;
-    color:var(--text);
-    margin-top: 24px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    position: fixed;
-    left: 0; right: 0;
-    bottom: 10px;
-    z-index: 2;
-  }
+    /* ورودی‌ها و آیکون‌ها (هم‌اندازه) */
+    .input-row{ display:flex; align-items:center; gap:8px; background:var(--glass); padding:8px 10px; border-radius:8px; margin:10px auto; width:86%; box-sizing:border-box; }
+    .input-row i { font-size:18px; color: #f1f5f9; width:26px; text-align:center; }
+    .input-row input{ flex:1; border:none; background:transparent; outline:none; color:var(--text); font-size:15px; padding:6px; }
 
-  /* ورودی‌ها و دکمه ورود — اندازه یکسان */
-  .login-container input[type="text"],
-  .login-container input[type="password"],
-  .login-container button {
-    width: 70%; /* اندازه یکنواخت برای همه */
-    padding: 10px 12px;
-    margin: 8px auto;
-    display:block;
-    border-radius:6px;
-    border:1px solid rgba(0,0,0,0.15);
-    box-sizing: border-box;
-    font-size: 1rem;
-  }
-  .login-container input::placeholder { color: #666; }
+    /* دکمه ورود هم‌اندازه با ورودی‌ها، آیکون یک اندازه */
+    .btn-enter{
+      width:86%;
+      margin:12px auto 6px;
+      padding:10px;
+      border-radius:8px;
+      border:none;
+      background:var(--accent);
+      color:white;
+      font-size:16px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+    }
+    .btn-enter i { font-size:18px; }
 
-  .login-container button {
-    background: var(--accent);
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
+    /* عنوان بزرگِ شیشه‌ای پایین صفحه لاگین */
+    .login-footer-title{
+      margin-top:18px;
+      font-size:20px;
+      font-weight:800;
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.03);
+      display:inline-block;
+      padding:8px 16px;
+      border-radius:8px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
 
-  .login-msg { color:#ffb4b4; min-height:18px; margin-top:6px; font-size:0.95rem; }
+    /* پیام خطا */
+    .msg { color:#ffb4b4; min-height:20px; margin-top:8px; font-size:14px; }
 
-  /* صفحات داخلی */
-  .container { padding: 16px; max-width: 980px; margin: 8px auto; }
+    /* ---------- صفحات داخلی (واحدها، شیفتها، جزئیات) ---------- */
+    .container { width:95%; max-width:1100px; margin:24px auto; padding-bottom:80px; box-sizing:border-box; }
+    .hidden{ display:none; }
+    .back-btn{
+      background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; margin-bottom:12px;
+    }
 
-  .hidden { display:none; }
+    .unit-list .unit-btn, .shift-list .shift-btn {
+      width:100%; text-align:right; padding:12px; background:#1f2a3a; color:var(--text); border-radius:8px; border:none; margin-bottom:10px; cursor:pointer; font-size:16px;
+    }
 
-  .back-btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius:6px;
-    cursor:pointer;
-    margin-bottom:12px;
-  }
+    .detail-card{
+      background:#0b1520; padding:14px; border-radius:10px; color:var(--text);
+    }
+    .detail-card textarea{ width:100%; min-height:100px; resize:vertical; margin-top:8px; border-radius:6px; padding:8px; border:1px solid rgba(255,255,255,0.08); }
 
-  .unit-list button, .shift-list button {
-    width:100%;
-    text-align: right;
-    background: #334155;
-    color:var(--text);
-    border:none;
-    padding:12px;
-    margin-bottom:8px;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:1rem;
-  }
-
-  .detail-card {
-    background: #1e293b;
-    padding:12px;
-    border-radius:8px;
-  }
-
-  /* پاسخ‌گویی موبایل */
-  @media (max-width:480px){
-    .login-container { width:90%; margin-top:6vh; padding:16px; }
-    .login-container input, .login-container button { width:85%; }
-  }
-</style>
+    /* responsive */
+    @media (max-width:600px){
+      .login-card{ width:92%; padding:16px; }
+      .input-row, .btn-enter{ width:92%; }
+      .container{ padding:12px; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ===== صفحه لاگین ===== -->
-<div id="loginPage" class="login-container" aria-live="polite">
-  <!-- لوگو: قرار بده کنار index.html با نام Gz.PNG -->
-  <img class="logo" src="Gz.PNG" alt="لوگوی شرکت معدنی و صنعتی گهرزمین" />
+  <!-- پس‌زمینه لوگوی مات (همه صفحات) -->
+  <div class="bg-img" aria-hidden="true"></div>
 
-  <!-- متن توضیحی بالای فیلدها حذف شده (مطابق خواست شما) -->
+  <!-- ===== صفحه لاگین ===== -->
+  <section id="loginPage" class="page" aria-label="صفحه ورود">
+    <div class="login-wrap">
+      <div class="login-card" role="form" aria-labelledby="loginTitle">
+        <!-- لوگوی شرکت فقط در لاگین -->
+        <img src="Gz.PNG" alt="لوگوی شرکت معدنی و صنعتی گهرزمین" class="logo" />
+        <div id="loginTitle" class="login-title">ورود به سامانه شیفت</div>
 
-  <input id="username" type="text" placeholder="نام کاربری (مثال: 1 یا 1000)" inputmode="numeric" />
-  <input id="password" type="password" placeholder="رمز عبور" />
+        <div class="input-row" title="نام کاربری">
+          <i class="fa-solid fa-user"></i>
+          <input id="username" type="text" inputmode="numeric" placeholder="نام کاربری (مثال: 1 یا 1000)" aria-label="نام کاربری"/>
+        </div>
 
-  <button id="loginBtn" type="button" onclick="login()">ورود</button>
+        <div class="input-row" title="رمز عبور">
+          <i class="fa-solid fa-lock"></i>
+          <input id="password" type="password" placeholder="رمز عبور" aria-label="رمز عبور"/>
+        </div>
 
-  <div id="loginMsg" class="login-msg"></div>
-</div>
+        <button class="btn-enter" id="loginBtn" aria-label="ورود">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          ورود
+        </button>
 
-<!-- ===== صفحه واحدها (برای کاربران عادی) ===== -->
-<div id="unitsPage" class="container hidden" role="region" aria-label="انتخاب واحد">
-  <button class="back-btn" onclick="goBackLogin()">بازگشت</button>
-  <h3>انتخاب واحد</h3>
-  <div id="unitList" class="unit-list"></div>
-</div>
+        <div id="loginMsg" class="msg" role="status" aria-live="polite"></div>
 
-<!-- ===== صفحه شیفت‌ها (برای هر واحد) ===== -->
-<div id="shiftsPage" class="container hidden" role="region" aria-label="شیفت‌های واحد">
-  <button class="back-btn" onclick="goBackUnits()">بازگشت</button>
-  <h3 id="shiftUnitName">شیفت‌های واحد</h3>
-  <div id="shiftList" class="shift-list"></div>
-</div>
+        <!-- عنوان رسمی و شیشه‌ای پایین صفحه لاگین -->
+        <div style="height:12px"></div>
+        <div id="loginFooterTitle" class="login-footer-title" aria-hidden="true">سامانه شیفت شرکت معدنی و صنعتی گهرزمین</div>
+      </div>
+    </div>
+  </section>
 
-<!-- ===== صفحه جزئیات شیفت ===== -->
-<div id="detailsPage" class="container hidden" role="region" aria-label="جزئیات شیفت">
-  <button class="back-btn" onclick="goBackShifts()">بازگشت</button>
-  <h3 id="detailTitle">جزئیات شیفت</h3>
-  <div id="detailContent" class="detail-card"></div>
-</div>
+  <!-- ===== صفحه واحدها (برای کاربران عادی) ===== -->
+  <section id="unitsPage" class="page hidden" aria-label="انتخاب واحد">
+    <div class="container">
+      <button class="back-btn" id="unitsBackBtn">بازگشت</button>
+      <h2>انتخاب واحد</h2>
+      <div id="unitList" class="unit-list" style="margin-top:12px"></div>
+    </div>
+  </section>
 
-<!-- عنوان شرکت در پایین صفحه (بدون کادر آبی) -->
-<div class="footer-title">سامانه شیفت شرکت معدنی و صنعتی گهرزمین</div>
+  <!-- ===== صفحه شیفت‌ها (برای هر واحد) ===== -->
+  <section id="shiftsPage" class="page hidden" aria-label="شیفت‌های واحد">
+    <div class="container">
+      <button class="back-btn" id="shiftsBackBtn">بازگشت</button>
+      <h2 id="shiftUnitName">شیفت‌های واحد</h2>
+      <div id="shiftList" class="shift-list" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <!-- ===== صفحه جزئیات شیفت ===== -->
+  <section id="detailsPage" class="page hidden" aria-label="جزئیات شیفت">
+    <div class="container">
+      <button class="back-btn" id="detailsBackBtn">بازگشت</button>
+      <h2 id="detailTitle">جزئیات شیفت</h2>
+      <div id="detailContent" class="detail-card" style="margin-top:12px"></div>
+    </div>
+  </section>
 
 <script>
-/* ===== داده‌ها ===== */
+/* ---------- داده‌ها و تنظیمات ---------- */
 const units = [
+  // واحد معدن (سرپرست‌ها مطابق خواسته)
   { name:'واحد معدن', type:'general', shifts:[
-    {name:'A', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
-    {name:'B', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
-    {name:'C', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
-    {name:'D', supervisor:'آقای ملکشاهی', data:{}}
+    { name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, humidity:8, blaine:1200} },
+    { name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, humidity:9, blaine:1150} },
+    { name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, humidity:7, blaine:1180} },
+    { name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{} }
   ]},
+  // واحد فرآوری و خردایش
   { name:'واحد فرآوری و خردایش', type:'general', shifts:[
-    {name:'A', supervisor:'آقای قاسمی', data:{FEO:0.01, رطوبت:10, بلین:1250}},
-    {name:'B', supervisor:'آقای طوسی', data:{FEO:0.011, رطوبت:9, بلین:1230}},
-    {name:'C', supervisor:'آقای ابراهیمی', data:{FEO:0.009, رطوبت:8, بلین:1220}},
-    {name:'D', supervisor:'آقای ملکشاهی', data:{}}
+    { name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.01, humidity:10, blaine:1250} },
+    { name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.011, humidity:9, blaine:1230} },
+    { name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.009, humidity:8, blaine:1220} },
+    { name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{} }
   ]},
+  // واحد گندله سازی
   { name:'واحد گندله‌سازی', type:'general', shifts:[
-    {name:'A', supervisor:'آقای سعید', data:{FEO:0.008, رطوبت:8, بلین:1200}},
-    {name:'B', supervisor:'آقای نورمندی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
-    {name:'C', supervisor:'آقای امامی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
-    {name:'D', supervisor:'آقای روح‌الامینی', data:{}}
+    { name:'A', time:'07:00 - 15:00', supervisor:'آقای سعید', data:{FEO:0.008, humidity:8, blaine:1200} },
+    { name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{FEO:0.009, humidity:9, blaine:1150} },
+    { name:'C', time:'23:00 - 07:00', supervisor:'آقای امامی', data:{FEO:0.007, humidity:7, blaine:1180} },
+    { name:'D', time:'استراحت', supervisor:'آقای روح‌الامینی', data:{} }
   ]},
+  // واحد انرژی و سیالات
   { name:'واحد انرژی و سیالات', type:'energy', shifts:[
-    {name:'A', supervisor:'حسن', data:{برق:80, آب:60, گاز:50}},
-    {name:'B', supervisor:'آقای نورمندی', data:{برق:85, آب:62, گاز:52}},
-    {name:'C', supervisor:'آقای خواجویی', data:{برق:78, آب:58, گاز:49}},
-    {name:'D', supervisor:'آقای مجیدی', data:{}}
+    { name:'A', time:'07:00 - 15:00', supervisor:'حسن', data:{electric:80, water:60, gas:50} },
+    { name:'B', time:'15:00 - 23:00', supervisor:'آقای نورمندی', data:{electric:85, water:62, gas:52} },
+    { name:'C', time:'23:00 - 07:00', supervisor:'آقای خواجویی', data:{electric:78, water:58, gas:49} },
+    { name:'D', time:'استراحت', supervisor:'آقای مجیدی', data:{} }
   ]},
+  // واحد آزمایشگاه
   { name:'واحد آزمایشگاه', type:'general', shifts:[
-    {name:'A', supervisor:'آقای قاسمی', data:{FEO:0.008, رطوبت:8, بلین:1200}},
-    {name:'B', supervisor:'آقای طوسی', data:{FEO:0.009, رطوبت:9, بلین:1150}},
-    {name:'C', supervisor:'آقای ابراهیمی', data:{FEO:0.007, رطوبت:7, بلین:1180}},
-    {name:'D', supervisor:'آقای ملکشاهی', data:{}}
+    { name:'A', time:'07:00 - 15:00', supervisor:'آقای قاسمی', data:{FEO:0.008, humidity:8, blaine:1200} },
+    { name:'B', time:'15:00 - 23:00', supervisor:'آقای طوسی', data:{FEO:0.009, humidity:9, blaine:1150} },
+    { name:'C', time:'23:00 - 07:00', supervisor:'آقای ابراهیمی', data:{FEO:0.007, humidity:7, blaine:1180} },
+    { name:'D', time:'استراحت', supervisor:'آقای ملکشاهی', data:{} }
   ]}
 ];
 
-/* نگهداری وضعیت */
+const managerUnitMap = {1:0,2:1,3:2,4:3,5:4}; // یوزرنیم مدیرها -> ایندکس واحد
 let isManager = false;
-let currentUnit = null;
-let currentShift = null;
+let currentUnit = null;   // index
+let currentShift = null;  // index
 
-/* نگاشت مدیرها: یوزرنیم 1..5 به ترتیب واحدها */
-const managerUnitMap = {1:0, 2:1, 3:2, 4:3, 5:4};
+/* المان‌های صفحه */
+const loginPage = document.getElementById('loginPage');
+const unitsPage = document.getElementById('unitsPage');
+const shiftsPage = document.getElementById('shiftsPage');
+const detailsPage = document.getElementById('detailsPage');
 
-/* المان‌ها */
-const elLoginPage = document.getElementById('loginPage');
-const elUnitsPage = document.getElementById('unitsPage');
-const elShiftsPage = document.getElementById('shiftsPage');
-const elDetailsPage = document.getElementById('detailsPage');
+const unitListEl = document.getElementById('unitList');
+const shiftListEl = document.getElementById('shiftList');
+const shiftUnitNameEl = document.getElementById('shiftUnitName');
+const detailContentEl = document.getElementById('detailContent');
+const loginMsgEl = document.getElementById('loginMsg');
 
-const elLoginMsg = document.getElementById('loginMsg');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const loginBtn = document.getElementById('loginBtn');
 
-/* ===== توابع ناوبری و منطق ===== */
+const unitsBackBtn = document.getElementById('unitsBackBtn');
+const shiftsBackBtn = document.getElementById('shiftsBackBtn');
+const detailsBackBtn = document.getElementById('detailsBackBtn');
+
+/* تابع کمکی برای مخفی/نمایان کردن صفحات */
+function showOnly(pageId){
+  // همه را پنهان کن
+  [loginPage, unitsPage, shiftsPage, detailsPage].forEach(p=>p.classList.add('hidden'));
+  document.getElementById(pageId).classList.remove('hidden');
+}
+
+/* ===== لاگین ===== */
 function login(){
-  elLoginMsg.textContent = '';
-  const uVal = document.getElementById('username').value.trim();
-  const pVal = document.getElementById('password').value;
+  loginMsgEl.textContent = '';
+  const uVal = usernameInput.value.trim();
+  const pVal = passwordInput.value;
 
-  if (!uVal) { elLoginMsg.textContent = 'نام کاربری را وارد کنید'; return; }
+  if(!uVal){ loginMsgEl.textContent = 'نام کاربری را وارد کنید.'; return; }
+  if(!pVal){ loginMsgEl.textContent = 'رمز عبور را وارد کنید.'; return; }
+
   const u = Number(uVal);
-  if (Number.isNaN(u)) { elLoginMsg.textContent = 'نام کاربری باید عددی باشد'; return; }
+  if(Number.isNaN(u)){ loginMsgEl.textContent = 'نام کاربری باید عددی باشد.'; return; }
 
-  if (pVal !== '123') { elLoginMsg.textContent = 'رمز عبور اشتباه است'; return; }
+  if(pVal !== '123'){ loginMsgEl.textContent = 'رمز عبور اشتباه است.'; return; }
 
-  // مدیر: 1..5
-  if (u >= 1 && u <= 5) {
+  // مدیران
+  if(u >=1 && u <=5){
     isManager = true;
     currentUnit = managerUnitMap[u];
-    // پنهان‌سازی لاگین و رفتن مستقیم به صفحه شیفت همان واحدِ مدیر
-    hideAllPages();
+    // نمایش شیفت‌های همان واحد
     renderShiftsForCurrentUnit();
-    elShiftsPage.classList.remove('hidden');
-    // تمرکز روی اولین المان برای دسترس‌پذیری
+    showOnly('shiftsPage');
+    // اسکرول به بالا و تمرکز
+    window.scrollTo({top:0,behavior:'smooth'});
     return;
   }
 
-  // کاربر عادی: 1000..1800
-  if (u >= 1000 && u <= 1800) {
+  // کاربران عادی
+  if(u >=1000 && u <=1800){
     isManager = false;
-    hideAllPages();
+    currentUnit = null;
     renderUnits();
-    elUnitsPage.classList.remove('hidden');
+    showOnly('unitsPage');
+    window.scrollTo({top:0,behavior:'smooth'});
     return;
   }
 
-  elLoginMsg.textContent = 'نام کاربری معتبر نیست';
+  loginMsgEl.textContent = 'نام کاربری معتبر نیست.';
 }
 
-/* پنهان کردن تمام صفحات داخلی (نمایش لاگین) */
-function hideAllPages(){
-  elUnitsPage.classList.add('hidden');
-  elShiftsPage.classList.add('hidden');
-  elDetailsPage.classList.add('hidden');
-  elLoginPage.classList.add('hidden');
-}
+/* فشردن Enter روی فیلدها => login */
+usernameInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); login(); } });
+passwordInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); login(); } });
+loginBtn.addEventListener('click', login);
 
-/* بازگشت به لاگین و پاکسازی وضعیت */
-function goBackLogin(){
-  // پاکسازی وضعیت
-  isManager = false;
-  currentUnit = null;
-  currentShift = null;
-  // بازنشانی فیلدها
-  document.getElementById('username').value = '';
-  document.getElementById('password').value = '';
-  elLoginMsg.textContent = '';
-
-  // نمایش لاگین و پنهان کردن بقیه
-  elUnitsPage.classList.add('hidden');
-  elShiftsPage.classList.add('hidden');
-  elDetailsPage.classList.add('hidden');
-  elLoginPage.classList.remove('hidden');
-}
-
-/* از صفحه شیفت‌ها به صفحه واحدها یا لاگین برمی‌گردد */
-function goBackUnits(){
-  // اگر مدیر است، با زدن بازگشت باید به لاگین برگردد (چون مدیر فقط واحد خودش را می‌بیند)
-  if (isManager) {
-    goBackLogin();
-    return;
-  }
-  // کاربر عادی -> بازگشت به صفحه واحدها
-  elShiftsPage.classList.add('hidden');
-  elDetailsPage.classList.add('hidden');
-  renderUnits();
-  elUnitsPage.classList.remove('hidden');
-}
-
-/* از صفحه جزئیات به صفحه شیفت برمی‌گردد */
-function goBackShifts(){
-  elDetailsPage.classList.add('hidden');
-  renderShiftsForCurrentUnit();
-  elShiftsPage.classList.remove('hidden');
-}
-
-/* ===== رندر لیست واحدها برای کاربران عادی ===== */
+/* ===== صفحه واحدها (برای کاربران عادی) ===== */
 function renderUnits(){
-  const listDiv = document.getElementById('unitList');
-  listDiv.innerHTML = '';
-  units.forEach((unit, idx) => {
+  unitListEl.innerHTML = '';
+  units.forEach((u, idx)=>{
     const btn = document.createElement('button');
-    btn.textContent = unit.name;
-    btn.onclick = () => { currentUnit = idx; renderShiftsForCurrentUnit(); elUnitsPage.classList.add('hidden'); elShiftsPage.classList.remove('hidden'); };
-    listDiv.appendChild(btn);
+    btn.className = 'unit-btn';
+    btn.textContent = u.name;
+    btn.onclick = ()=>{
+      currentUnit = idx;
+      renderShiftsForCurrentUnit();
+      showOnly('shiftsPage');
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+    const wrapper = document.createElement('div');
+    wrapper.appendChild(btn);
+    unitListEl.appendChild(wrapper);
   });
 }
 
-/* ===== رندر شیفت‌های واحد فعلی (فقط نام شیفت و سرپرست) ===== */
+/* ===== صفحه شیفت‌ها: فقط شیفت و سرپرست (ساعت حذف شده) ===== */
 function renderShiftsForCurrentUnit(){
-  if (currentUnit === null) return;
+  if(currentUnit === null || typeof currentUnit === 'undefined') return;
   const unit = units[currentUnit];
-  document.getElementById('shiftUnitName').textContent = unit.name;
-  const listDiv = document.getElementById('shiftList');
-  listDiv.innerHTML = '';
-  unit.shifts.forEach((shift, idx) => {
+  shiftUnitNameEl.textContent = unit.name;
+  shiftListEl.innerHTML = '';
+  unit.shifts.forEach((sh, idx)=>{
     const btn = document.createElement('button');
-    // ساعت حذف شده؛ فقط شیفت و سرپرست نمایش داده می‌شود
-    btn.textContent = `شیفت ${shift.name} | سرپرست: ${shift.supervisor}`;
-    btn.onclick = () => { currentShift = idx; showDetailsPage(); };
-    listDiv.appendChild(btn);
+    btn.className = 'shift-btn';
+    btn.textContent = `شیفت ${sh.name} | سرپرست: ${sh.supervisor}`;
+    btn.onclick = ()=>{
+      currentShift = idx;
+      showDetailsPage();
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+    shiftListEl.appendChild(btn);
   });
 }
 
-/* ===== صفحه جزئیات شیفت ===== */
+/* ===== نمایش جزئیات شیفت ===== */
 function showDetailsPage(){
   const unit = units[currentUnit];
   const shift = unit.shifts[currentShift];
-  const content = document.getElementById('detailContent');
-  // عنوان: بدون نمایش ساعت در لیست، اما در جزئیات می‌توان ساعت را هم نشان داد (اگر خواستی)
-  content.innerHTML = `<div style="font-weight:700; margin-bottom:8px">شیفت ${shift.name} | سرپرست: ${shift.supervisor}</div>`;
+  if(!unit || !shift) return;
 
-  if (isManager) {
-    // مدیر: گزارش readonly و متن "در حال بروز رسانی"، نظر مدیر قابل نوشتن
-    content.innerHTML += `<div style="margin-bottom:8px">گزارش شیفت:<br><textarea readonly style="width:100%;height:80px">در حال بروز رسانی</textarea></div>`;
-    content.innerHTML += `<div style="margin-bottom:8px">نظر مدیر واحد:<br><textarea id="managerComment" placeholder="نظر خود را وارد کنید" style="width:100%;height:80px"></textarea></div>`;
+  // عنوان و سرپرست و (در صورت تمایل ساعت) — ساعت را در بخش جزئیات نمایش می‌دهیم
+  detailContentEl.innerHTML = `<div style="font-weight:800; font-size:16px; margin-bottom:10px;">شیفت ${shift.name} | زمان: ${shift.time} | سرپرست: ${shift.supervisor}</div>`;
+
+  if(isManager){
+    // مدیر: گزارش readonly، متن "در حال بروز رسانی"؛ نظر مدیر قابل نوشتن
+    detailContentEl.innerHTML += `<div style="margin-top:8px;">گزارش شیفت:<br><textarea readonly>در حال بروز رسانی</textarea></div>`;
+    detailContentEl.innerHTML += `<div style="margin-top:10px;">نظر مدیر واحد:<br><textarea id="managerComment" placeholder="نظر خود را وارد کنید"></textarea></div>`;
   } else {
-    // کاربر عادی: گزارش قابل نوشتن، نظر مدیر متن "در حال بروز رسانی"
-    content.innerHTML += `<div style="margin-bottom:8px">گزارش شیفت:<br><textarea id="userReport" placeholder="گزارش خود را وارد کنید" style="width:100%;height:80px"></textarea></div>`;
-    content.innerHTML += `<div style="margin-bottom:8px;color:#ddd">نظر مدیر واحد: در حال بروز رسانی</div>`;
+    // کاربر عادی: گزارش قابل نوشتن؛ نظر مدیر متن "در حال بروز رسانی"
+    detailContentEl.innerHTML += `<div style="margin-top:8px;">گزارش شیفت:<br><textarea id="userReport" placeholder="گزارش خود را وارد کنید"></textarea></div>`;
+    detailContentEl.innerHTML += `<div style="margin-top:10px;color:#cbd5e1">نظر مدیر واحد: در حال بروز رسانی</div>`;
   }
 
-  // داده‌های مختص هر واحد
-  if (unit.type === 'general') {
-    // نمایش مقادیر نمونه
-    content.innerHTML += `<div style="margin-top:10px">FEO: ${shift.data.FEO} &nbsp;&nbsp; رطوبت: ${shift.data.رطوبت}% &nbsp;&nbsp; بلین: ${shift.data.بلین}</div>`;
-    content.innerHTML += `<canvas id="chartFEO" style="margin-top:12px; max-width:100%;"></canvas>`;
-  } else if (unit.type === 'energy') {
-    content.innerHTML += `<div style="margin-top:10px">برق: ${shift.data.برق}% &nbsp;&nbsp; آب: ${shift.data.آب}% &nbsp;&nbsp; گاز: ${shift.data.گاز}%</div>`;
-    content.innerHTML += `<canvas id="chartEnergy" style="margin-top:12px; max-width:100%;"></canvas>`;
+  // مقادیر واحدها و نمودار
+  if(unit.type === 'general'){
+    const d = shift.data;
+    detailContentEl.innerHTML += `<div style="margin-top:12px; font-weight:600;">FEO: ${d.FEO ?? '-'} &nbsp;&nbsp; رطوبت: ${d.humidity ?? '-'}% &nbsp;&nbsp; بلین: ${d.blaine ?? d.blaine ?? '-'}</div>`;
+    detailContentEl.innerHTML += `<canvas id="chartCanvas" style="margin-top:12px; max-width:100%;"></canvas>`;
+  } else if(unit.type === 'energy'){
+    const d = shift.data;
+    detailContentEl.innerHTML += `<div style="margin-top:12px; font-weight:600;">برق: ${d.electric ?? '-'}% &nbsp;&nbsp; آب: ${d.water ?? '-'}% &nbsp;&nbsp; گاز: ${d.gas ?? '-'}%</div>`;
+    detailContentEl.innerHTML += `<canvas id="chartCanvas" style="margin-top:12px; max-width:100%;"></canvas>`;
   }
 
-  // نمایش صفحه جزئیات
-  elShiftsPage.classList.add('hidden');
-  elDetailsPage.classList.remove('hidden');
+  showOnly('detailsPage');
 
-  // رسم نمودار (کمی تأخیر برای اطمینان از اضافه شدن کانواس به DOM)
-  setTimeout(() => {
-    if (unit.type === 'general') {
-      const ctx = document.getElementById('chartFEO');
-      if (ctx) {
-        new Chart(ctx, {
-          type: 'bar',
-          data: { labels: ['FEO', 'رطوبت', 'بلین'], datasets: [{ label: 'مقدار', data: [shift.data.FEO, shift.data.رطوبت, shift.data.بلین], backgroundColor: ['#2563eb','#facc15','#ef4444'] }] },
-          options: { responsive:true, scales:{ y:{ beginAtZero:true } } }
-        });
-      }
-    } else if (unit.type === 'energy') {
-      const ctx = document.getElementById('chartEnergy');
-      if (ctx) {
-        new Chart(ctx, {
-          type: 'bar',
-          data: { labels: ['برق','آب','گاز'], datasets: [{ label: 'مقدار', data: [shift.data.برق, shift.data.آب, shift.data.گاز], backgroundColor:['#2563eb','#22c55e','#f59e0b'] }] },
-          options: { responsive:true, scales:{ y:{ beginAtZero:true } } }
-        });
-      }
+  // رسم نمودار بعد از اضافه شدن کانواس
+  setTimeout(()=>{
+    const canvas = document.getElementById('chartCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    // پاک کردن canvas قبلی (در صورت وجود charts باقی‌مانده)
+    // ساخت داده براساس نوع واحد
+    if(units[currentUnit].type === 'general'){
+      const d = shift.data;
+      const labels = ['FEO','رطوبت','بلین'];
+      const values = [d.FEO ?? 0, d.humidity ?? 0, d.blaine ?? 0];
+      new Chart(ctx, {
+        type:'bar',
+        data:{ labels, datasets:[{ label:'مقدار', data: values, backgroundColor:['#2563eb','#facc15','#ef4444'] }] },
+        options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
+      });
+    } else if(units[currentUnit].type === 'energy'){
+      const d = shift.data;
+      const labels = ['برق','آب','گاز'];
+      const values = [d.electric ?? 0, d.water ?? 0, d.gas ?? 0];
+      new Chart(ctx, {
+        type:'bar',
+        data:{ labels, datasets:[{ label:'مقدار', data: values, backgroundColor:['#2563eb','#22c55e','#f59e0b'] }] },
+        options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
+      });
     }
-  }, 80);
+  },80);
 }
 
-/* ===== در بارگذاری اولیه، فقط لاگین نمایش داده شود ===== */
-(function init(){
-  // مطمئن شو loginPage نمایش داده میشه و بقیه مخفی
-  elLoginPage.classList.remove('hidden');
-  elUnitsPage.classList.add('hidden');
-  elShiftsPage.classList.add('hidden');
-  elDetailsPage.classList.add('hidden');
+/* ===== دکمه‌های بازگشت ===== */
+/* از صفحه واحدها به لاگین */
+document.getElementById('unitsBackBtn').addEventListener('click', ()=>{
+  // وقتی روی بازگشت واحدها کلیک میشه حتماً به لاگین برمیگرده (طبق درخواست)
+  // پاکسازی وضعیت
+  isManager = false; currentUnit = null; currentShift = null;
+  usernameInput.value=''; passwordInput.value=''; loginMsgEl.textContent='';
+  showOnly('loginPage');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
 
-  // فعال‌سازی کلید Enter برای لاگین
-  document.getElementById('username').addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); login(); } });
-  document.getElementById('password').addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); login(); } });
+/* از صفحه شیفت‌ها به صفحه قبل */
+document.getElementById('shiftsBackBtn').addEventListener('click', ()=>{
+  if(isManager){
+    // مدیر: بازگشت باید به لاگین برگرده
+    document.getElementById('unitsBackBtn').click();
+  } else {
+    // کاربر عادی: بازگشت به لیست واحدها
+    showOnly('unitsPage');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+});
+
+/* از صفحه جزئیات به شیفت‌ها */
+document.getElementById('detailsBackBtn').addEventListener('click', ()=>{
+  showOnly('shiftsPage');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* در بارگذاری اولیه فقط لاگین نمایش داده شود */
+(function init(){
+  showOnly('loginPage');
+  // placeholder اولیه یا هر تنظیم اضافه
 })();
+
 </script>
 </body>
 </html>
